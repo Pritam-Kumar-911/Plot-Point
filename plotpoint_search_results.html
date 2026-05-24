@@ -1,0 +1,330 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --surface2: #1a1a24;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --accent: #c8a96e;
+    --text: #f0ece4;
+    --muted: #6b6878;
+    --muted2: #4a4758;
+  }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; min-height: 100vh; }
+
+  .bg-layer { position: fixed; inset: 0; z-index: 0; background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(124,111,255,0.1) 0%, transparent 70%), var(--bg); }
+  .grain { position: fixed; inset: 0; z-index: 1; opacity: 0.03; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E"); }
+
+  /* Navbar */
+  nav { position: relative; z-index: 10; display: flex; align-items: center; justify-content: space-between; padding: 18px 48px; border-bottom: 1px solid var(--border); background: rgba(10,10,15,0.8); backdrop-filter: blur(12px); }
+  .logo { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 4px; display: flex; align-items: center; gap: 8px; cursor: pointer; }
+  .logo-dot { width: 7px; height: 7px; background: var(--accent); border-radius: 50%; }
+
+  /* Compact search bar in nav */
+  .nav-search { flex: 1; max-width: 480px; margin: 0 32px; display: flex; align-items: center; background: rgba(255,255,255,0.04); border: 1px solid var(--border2); border-radius: 10px; padding: 4px 4px 4px 16px; gap: 10px; transition: border-color 0.3s; }
+  .nav-search:focus-within { border-color: rgba(200,169,110,0.4); }
+  .nav-search input { flex: 1; background: none; border: none; outline: none; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--text); padding: 8px 0; caret-color: var(--accent); }
+  .nav-search input::placeholder { color: var(--muted); }
+  .nav-search-btn { padding: 8px 16px; border-radius: 7px; border: none; background: linear-gradient(135deg, #c8a96e, #b8944a); color: #0a0a0f; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500; cursor: pointer; white-space: nowrap; }
+  .nav-right { display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--muted); }
+  .btn-signin { font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; padding: 8px 20px; border-radius: 6px; border: 1px solid var(--border); background: rgba(255,255,255,0.05); color: var(--text); cursor: pointer; transition: all 0.2s; }
+  .btn-signin:hover { background: rgba(255,255,255,0.1); }
+
+  /* Layout */
+  .page { position: relative; z-index: 5; display: flex; gap: 0; min-height: calc(100vh - 65px); }
+
+  /* Sidebar */
+  .sidebar { width: 240px; flex-shrink: 0; border-right: 1px solid var(--border); padding: 28px 24px; display: flex; flex-direction: column; gap: 28px; }
+
+  .filter-group-title { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+
+  /* Genre filter */
+  .genre-list { display: flex; flex-direction: column; gap: 8px; }
+  .genre-item { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+  .genre-item input[type=checkbox] { display: none; }
+  .genre-check { width: 16px; height: 16px; border-radius: 4px; border: 1px solid var(--border2); background: rgba(255,255,255,0.03); display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; }
+  .genre-item input:checked + .genre-check { background: var(--accent); border-color: var(--accent); }
+  .genre-check::after { content: '✓'; font-size: 10px; color: #0a0a0f; opacity: 0; transition: opacity 0.2s; }
+  .genre-item input:checked + .genre-check::after { opacity: 1; }
+  .genre-label { font-size: 13px; color: var(--muted); transition: color 0.2s; }
+  .genre-item:hover .genre-label { color: var(--text); }
+
+  /* Year slider */
+  .year-range { display: flex; flex-direction: column; gap: 10px; }
+  .year-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); }
+  input[type=range] { width: 100%; accent-color: var(--accent); height: 2px; cursor: pointer; }
+
+  /* Rating filter */
+  .rating-options { display: flex; flex-direction: column; gap: 7px; }
+  .rating-opt { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13px; color: var(--muted); transition: color 0.2s; }
+  .rating-opt:hover { color: var(--text); }
+  .rating-dot { width: 8px; height: 8px; border-radius: 50%; border: 1px solid var(--border2); transition: all 0.2s; flex-shrink: 0; }
+  .rating-opt.active .rating-dot { background: var(--accent); border-color: var(--accent); }
+  .rating-opt.active { color: var(--text); }
+
+  /* Match threshold */
+  .match-track { position: relative; height: 4px; background: var(--border2); border-radius: 2px; margin-top: 8px; }
+  .match-fill { position: absolute; left: 0; top: 0; height: 100%; background: linear-gradient(to right, #c8a96e, #7c6fff); border-radius: 2px; width: 70%; transition: width 0.2s; }
+
+  .clear-btn { font-size: 12px; color: var(--accent); cursor: pointer; opacity: 0.7; transition: opacity 0.2s; text-align: center; padding: 8px; border-radius: 6px; border: 1px solid rgba(200,169,110,0.2); background: rgba(200,169,110,0.04); }
+  .clear-btn:hover { opacity: 1; }
+
+  /* Main content */
+  .main { flex: 1; padding: 28px 36px; display: flex; flex-direction: column; gap: 32px; overflow: hidden; }
+
+  /* Query header */
+  .query-header { display: flex; align-items: flex-start; justify-content: space-between; }
+  .query-text { font-size: 12px; color: var(--muted); margin-bottom: 4px; letter-spacing: 0.5px; }
+  .query-phrase { font-size: 18px; font-weight: 500; color: var(--text); max-width: 500px; line-height: 1.4; }
+  .result-count { font-size: 12px; color: var(--muted); text-align: right; margin-top: 4px; }
+  .result-count span { color: var(--accent); font-weight: 500; }
+
+  /* FEATURED CARD */
+  .featured { display: flex; gap: 28px; background: var(--surface); border: 1px solid var(--border2); border-radius: 16px; overflow: hidden; position: relative; }
+  .featured-badge { position: absolute; top: 16px; left: 16px; font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent); padding: 4px 12px; border-radius: 100px; border: 1px solid rgba(200,169,110,0.4); background: rgba(200,169,110,0.1); z-index: 2; }
+
+  .featured-poster { width: 220px; flex-shrink: 0; background: linear-gradient(160deg,#0d1b3e,#1a3a6b,#0a0f2e); position: relative; min-height: 300px; }
+  .featured-poster::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to right, transparent 70%, var(--surface)); }
+
+  .featured-match { position: absolute; bottom: 16px; left: 16px; z-index: 3; }
+  .match-circle { width: 60px; height: 60px; border-radius: 50%; background: rgba(10,10,15,0.85); border: 2px solid var(--accent); display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .match-pct { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--accent); line-height: 1; }
+  .match-lbl { font-size: 7px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
+
+  .featured-info { flex: 1; padding: 28px 28px 28px 8px; display: flex; flex-direction: column; justify-content: center; gap: 14px; }
+  .featured-title { font-family: 'Bebas Neue', sans-serif; font-size: 42px; letter-spacing: 2px; line-height: 1; color: var(--text); }
+  .featured-meta { display: flex; align-items: center; gap: 16px; font-size: 12px; color: var(--muted); }
+  .featured-meta .sep { opacity: 0.3; }
+  .featured-rating { color: var(--accent); font-weight: 500; }
+  .featured-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+  .ftag { font-size: 11px; padding: 4px 12px; border-radius: 100px; border: 1px solid var(--border2); color: var(--muted); background: rgba(255,255,255,0.03); }
+  .featured-plot { font-size: 13px; font-weight: 300; color: var(--muted); line-height: 1.7; max-width: 480px; }
+
+  .why-matched { background: rgba(200,169,110,0.06); border: 1px solid rgba(200,169,110,0.2); border-radius: 10px; padding: 12px 16px; }
+  .why-title { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+  .why-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+  .why-tag { font-size: 11px; padding: 3px 10px; border-radius: 100px; background: rgba(200,169,110,0.12); color: var(--accent); border: 1px solid rgba(200,169,110,0.25); }
+
+  .featured-actions { display: flex; gap: 10px; }
+  .btn-primary { padding: 10px 24px; border-radius: 8px; border: none; background: linear-gradient(135deg, #c8a96e, #b8944a); color: #0a0a0f; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(200,169,110,0.3); }
+  .btn-secondary { padding: 10px 20px; border-radius: 8px; border: 1px solid var(--border2); background: rgba(255,255,255,0.04); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; transition: all 0.2s; }
+  .btn-secondary:hover { background: rgba(255,255,255,0.08); }
+
+  /* Grid section */
+  .grid-header { display: flex; align-items: center; justify-content: space-between; }
+  .grid-title { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 10px; }
+  .grid-title::before { content: ''; display: block; width: 20px; height: 1px; background: var(--accent); }
+  .sort-select { font-family: 'DM Sans', sans-serif; font-size: 12px; background: var(--surface); border: 1px solid var(--border); color: var(--muted); padding: 6px 12px; border-radius: 6px; cursor: pointer; outline: none; }
+
+  .results-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(148px, 1fr)); gap: 16px; }
+
+  .movie-card { cursor: pointer; transition: transform 0.25s; }
+  .movie-card:hover { transform: translateY(-5px); }
+  .movie-card:hover .card-overlay { opacity: 1; }
+
+  .card-poster { width: 100%; height: 210px; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 10px; position: relative; overflow: hidden; }
+  .card-poster::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 55%); }
+  .card-overlay { position: absolute; inset: 0; z-index: 3; background: rgba(200,169,110,0.08); border-radius: 10px; opacity: 0; transition: opacity 0.25s; display: flex; align-items: center; justify-content: center; }
+  .play-btn { width: 36px; height: 36px; border-radius: 50%; background: rgba(200,169,110,0.9); display: flex; align-items: center; justify-content: center; font-size: 12px; color: #0a0a0f; }
+  .match-badge { position: absolute; top: 8px; right: 8px; z-index: 4; background: rgba(200,169,110,0.15); border: 1px solid rgba(200,169,110,0.5); color: var(--accent); font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 100px; }
+  .card-title { font-size: 13px; font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 4px; }
+  .card-rating { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--accent); margin-bottom: 6px; }
+  .card-rating span { color: var(--muted); }
+  .card-tags { display: flex; gap: 4px; flex-wrap: wrap; }
+  .card-tag { font-size: 10px; padding: 2px 7px; border-radius: 100px; border: 1px solid var(--border); color: var(--muted); background: rgba(255,255,255,0.03); }
+  .why-mini { margin-top: 7px; font-size: 10px; color: rgba(200,169,110,0.7); font-style: italic; line-height: 1.4; }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .animate { animation: fadeUp 0.5s ease both; }
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<div class="grain"></div>
+
+<!-- Navbar -->
+<nav>
+  <div class="logo">Plot<span style="color:var(--accent)">Point</span><span class="logo-dot"></span></div>
+  <div class="nav-search">
+    <input type="text" value="a movie that feels like a warm hug but has a sad ending" id="navSearch"/>
+    <button class="nav-search-btn">✦ Search</button>
+  </div>
+  <div class="nav-right">
+    <button class="btn-signin">Sign In</button>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+
+    <div>
+      <div class="filter-group-title">Genre</div>
+      <div class="genre-list">
+        <label class="genre-item"><input type="checkbox" checked><div class="genre-check"></div><span class="genre-label">Drama</span></label>
+        <label class="genre-item"><input type="checkbox"><div class="genre-check"></div><span class="genre-label">Romance</span></label>
+        <label class="genre-item"><input type="checkbox"><div class="genre-check"></div><span class="genre-label">Sci-Fi</span></label>
+        <label class="genre-item"><input type="checkbox"><div class="genre-check"></div><span class="genre-label">Thriller</span></label>
+        <label class="genre-item"><input type="checkbox"><div class="genre-check"></div><span class="genre-label">Crime</span></label>
+        <label class="genre-item"><input type="checkbox"><div class="genre-check"></div><span class="genre-label">Animation</span></label>
+        <label class="genre-item"><input type="checkbox"><div class="genre-check"></div><span class="genre-label">History</span></label>
+      </div>
+    </div>
+
+    <div>
+      <div class="filter-group-title">Release Year</div>
+      <div class="year-range">
+        <input type="range" min="1970" max="2024" value="1990" id="yearSlider" oninput="document.getElementById('yearVal').textContent=this.value+' – 2024'">
+        <div class="year-labels"><span id="yearVal">1990 – 2024</span></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="filter-group-title">IMDb Rating</div>
+      <div class="rating-options">
+        <div class="rating-opt" onclick="setRating(this)"><div class="rating-dot"></div>Any rating</div>
+        <div class="rating-opt active" onclick="setRating(this)"><div class="rating-dot"></div>7.0 and above</div>
+        <div class="rating-opt" onclick="setRating(this)"><div class="rating-dot"></div>8.0 and above</div>
+        <div class="rating-opt" onclick="setRating(this)"><div class="rating-dot"></div>9.0 and above</div>
+      </div>
+    </div>
+
+    <div>
+      <div class="filter-group-title">Min Match %</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:6px;" id="matchLabel">70% and above</div>
+      <input type="range" min="50" max="95" value="70" oninput="updateMatch(this.value)">
+    </div>
+
+    <div class="clear-btn" onclick="clearFilters()">✕ Clear all filters</div>
+
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+
+    <!-- Query header -->
+    <div class="query-header animate">
+      <div>
+        <div class="query-text">Results for your vibe</div>
+        <div class="query-phrase">"a movie that feels like a warm hug but has a sad ending"</div>
+      </div>
+      <div class="result-count">Showing <span>9</span> matches</div>
+    </div>
+
+    <!-- Featured card -->
+    <div class="featured animate" style="animation-delay:0.1s">
+      <div class="featured-badge">✦ Best Match</div>
+      <div class="featured-poster">
+        <div class="featured-match">
+          <div class="match-circle">
+            <div class="match-pct">94</div>
+            <div class="match-lbl">match</div>
+          </div>
+        </div>
+      </div>
+      <div class="featured-info">
+        <div>
+          <div class="featured-title">Forrest Gump</div>
+          <div class="featured-meta">
+            <span>1994</span><span class="sep">|</span>
+            <span class="featured-rating">★ 8.8</span><span class="sep">|</span>
+            <span>142 min</span><span class="sep">|</span>
+            <span>Robert Zemeckis</span>
+          </div>
+        </div>
+        <div class="featured-tags">
+          <span class="ftag">Drama</span>
+          <span class="ftag">Romance</span>
+          <span class="ftag">Comedy</span>
+        </div>
+        <div class="featured-plot">
+          The presidencies of Kennedy and Johnson, the Vietnam War, the Watergate scandal and other defining events unfold from the perspective of an Alabama man with an extraordinary life journey.
+        </div>
+        <div class="why-matched">
+          <div class="why-title">Why this matched</div>
+          <div class="why-tags">
+            <span class="why-tag">bittersweet tone</span>
+            <span class="why-tag">emotional ending</span>
+            <span class="why-tag">heartwarming journey</span>
+          </div>
+        </div>
+        <div class="featured-actions">
+          <button class="btn-primary">♥ Add to Favorites</button>
+          <button class="btn-secondary">+ Watchlist</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grid -->
+    <div class="grid-header animate" style="animation-delay:0.2s">
+      <div class="grid-title">More Matches</div>
+      <select class="sort-select">
+        <option>Sort by: Match %</option>
+        <option>Sort by: IMDb Rating</option>
+        <option>Sort by: Year</option>
+      </select>
+    </div>
+
+    <div class="results-grid" id="resultsGrid"></div>
+
+  </main>
+</div>
+
+<script>
+  const movies = [
+    { title: "The Green Mile", year: 1999, rating: "8.6", match: 89, tags: ["Drama","Fantasy"], bg: "linear-gradient(160deg,#0a1a0a,#1a3a1a,#0d2e0d)", why: ["gentle giant", "unexpected loss", "emotional depth"] },
+    { title: "Good Will Hunting", year: 1997, rating: "8.3", match: 85, tags: ["Drama","Romance"], bg: "linear-gradient(160deg,#1a0d0a,#3a2010,#2e180d)", why: ["inner warmth", "bittersweet goodbye", "emotional growth"] },
+    { title: "Schindler's List", year: 1993, rating: "9.0", match: 82, tags: ["History","Drama"], bg: "linear-gradient(160deg,#1a1a1a,#2e2e2e,#111)", why: ["hope amid tragedy", "emotional weight", "sad resolution"] },
+    { title: "Grave of Fireflies", year: 1988, rating: "8.5", match: 80, tags: ["Animation","Drama"], bg: "linear-gradient(160deg,#1a1a0a,#2e2e10,#1a1a0d)", why: ["tender love", "devastating end", "childhood warmth"] },
+    { title: "Interstellar", year: 2014, rating: "8.7", match: 78, tags: ["Sci-Fi","Drama"], bg: "linear-gradient(160deg,#0d1b3e,#1a3a6b,#0a0f2e)", why: ["fatherly love", "sacrifice", "bittersweet reunion"] },
+    { title: "Up", year: 2009, rating: "8.2", match: 76, tags: ["Animation","Drama"], bg: "linear-gradient(160deg,#1a0a0a,#3a1010,#2d1515)", why: ["love & loss", "warm nostalgia", "emotional opening"] },
+    { title: "The Pursuit of Happyness", year: 2006, rating: "8.0", match: 74, tags: ["Drama","Biography"], bg: "linear-gradient(160deg,#0a1010,#1a3a3a,#0d2020)", why: ["hopeful struggle", "emotional payoff", "warm determination"] },
+    { title: "Coco", year: 2017, rating: "8.4", match: 72, tags: ["Animation","Drama"], bg: "linear-gradient(160deg,#2a0a1a,#4a1a3a,#1a0d2e)", why: ["family bonds", "moving farewell", "colorful warmth"] },
+  ];
+
+  const grid = document.getElementById('resultsGrid');
+  movies.forEach((m, i) => {
+    const card = document.createElement('div');
+    card.className = 'movie-card animate';
+    card.style.animationDelay = (0.25 + i * 0.06) + 's';
+    card.innerHTML = `
+      <div class="card-poster" style="background:${m.bg}">
+        <div class="match-badge">${m.match}%</div>
+        <div class="card-overlay"><div class="play-btn">▶</div></div>
+      </div>
+      <div class="card-title">${m.title}</div>
+      <div class="card-rating">★★★★☆ <span>${m.rating}</span></div>
+      <div class="card-tags">${m.tags.map(t=>`<span class="card-tag">${t}</span>`).join('')}</div>
+      <div class="why-mini">✦ ${m.why.join(' · ')}</div>
+    `;
+    grid.appendChild(card);
+  });
+
+  function setRating(el) {
+    document.querySelectorAll('.rating-opt').forEach(o => o.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  function updateMatch(v) {
+    document.getElementById('matchLabel').textContent = v + '% and above';
+  }
+
+  function clearFilters() {
+    document.querySelectorAll('.genre-item input').forEach(c => c.checked = false);
+    document.getElementById('yearSlider').value = 1970;
+    document.getElementById('yearVal').textContent = '1970 – 2024';
+    document.querySelectorAll('.rating-opt').forEach((o,i) => { o.classList.remove('active'); if(i===0) o.classList.add('active'); });
+  }
+</script>
+</body>
+</html>

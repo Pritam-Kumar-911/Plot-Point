@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Movie Engine</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- Navbar -->
+<header class="navbar">
+  <h1>AI Movie Engine</h1>
+  <nav>
+    <a href="#">Discover</a>
+    <a href="#">Top Charts</a>
+    <a href="#">Scraper Stats</a>
+  </nav>
+</header>
+
+<!-- Hero Section -->
+<section class="hero">
+  <h2>Discover Movies by Vibe 🎬</h2>
+
+  <div class="search-box">
+    <input id="searchInput" type="text" placeholder="e.g. clever thriller in a small town..." />
+    <button onclick="handleSearch()">Search</button>
+  </div>
+
+  <div class="toggle">
+    <span>AI Mode</span>
+    <div id="toggleBtn" class="toggle-btn active" onclick="toggleAI()">
+      <div class="circle"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Movie Grid -->
+<section class="grid" id="movieGrid"></section>
+
+<!-- Modal -->
+<div id="modal" class="modal hidden">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">×</span>
+
+    <h2 id="modalTitle"></h2>
+    <p id="modalPlot"></p>
+
+    <div class="insight-box">
+      <h3>Gemini Insight</h3>
+      <p id="modalInsight"></p>
+    </div>
+  </div>
+</div>
+
+<!-- Admin Dashboard -->
+<section class="dashboard">
+  <h2>Scraper Dashboard</h2>
+
+  <div class="stats">
+    <div class="card">
+      <h3>Last Scrape</h3>
+      <p id="lastScrape">--</p>
+    </div>
+    <div class="card">
+      <h3>Total Movies</h3>
+      <p id="totalMovies">0</p>
+    </div>
+  </div>
+
+  <div class="logs">
+    <h3>Live Logs</h3>
+    <ul id="logList"></ul>
+  </div>
+</section>
+
+<script src="script.js"></script>
+</body>
+</html>
