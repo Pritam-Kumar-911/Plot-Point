@@ -6,8 +6,6 @@ const pool = new Pool({
   user: "postgres",
   password: "postgres",
   database: "postgres",
-//   ssl: false,
-//   connectionTimeoutMillis: 5000,
 });
 
 module.exports = pool;

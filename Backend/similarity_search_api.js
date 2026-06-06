@@ -3,7 +3,7 @@ const express = require('express');
 const pool = require('./db');
 const app = express();
 
-app.get('/home' , async (req , res) => {
+app.get('/api/search' , async (req , res) => {
     console.log(req.query.prompt);
     const geminiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:embedContent?key=${process.env.GEMINI_API_KEY}`,
         {
