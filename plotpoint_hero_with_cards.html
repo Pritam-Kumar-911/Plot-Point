@@ -142,12 +142,27 @@
 <nav>
   <div class="logo">Plot<span style="color:var(--accent)">Point</span><span class="logo-dot"></span></div>
   <ul class="nav-links">
-    <li class="active">Discover</li>
+    <!-- <li class="active">Discover</li>
     <li>Trending</li>
     <li>Genres</li>
-    <li>My List</li>
+    <li>My List</li> -->
+    <li class="active" onclick="location.href='index.html'">Discover</li>
+    <li onclick="location.href='explore.html'">Explore</li>
+    <li onclick="location.href='mylist.html'">My List</li>
+    <li onclick="location.href='dashboard.html'">Dashboard</li>
   </ul>
-  <button class="btn-signin">Sign In</button>
+  <select id="userSelect" onchange="switchUser(this.value)" style="
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    outline: none;
+  ">
+</select>
 </nav>
 
 <section class="hero">
@@ -237,7 +252,7 @@
   </div>
 </section>
 
-<script>
+<!-- <script>
   const movies = [
     { title: "Interstellar", year: 2014, rating: "8.7", match: 94, tags: ["Sci-Fi", "Drama"], bg: "linear-gradient(160deg,#0d1b3e,#1a3a6b,#0a0f2e)" },
     { title: "The Godfather", year: 1972, rating: "9.2", match: 91, tags: ["Crime", "Drama"], bg: "linear-gradient(160deg,#1a0a0a,#4a1010,#2d1515)" },
@@ -281,4 +296,83 @@
   }
 </script>
 </body>
-</html>
+</html> -->
+
+<script>
+  // ── USERS DROPDOWN ──────────────────────────────
+  async function loadUsers() {
+    const response = await fetch('http://localhost:3000/api/users');
+    const users = await response.json();
+    const select = document.getElementById('userSelect');
+    select.innerHTML = '<option value="">Sign In</option>';
+    users.forEach(user => {
+      const option = document.createElement('option');
+      option.value = user.user_id;
+      option.textContent = user.username;
+      select.appendChild(option);
+    });
+    // restore saved user
+    const savedId = localStorage.getItem('user_id');
+    if (savedId) select.value = savedId;
+  }
+
+  function switchUser(userId) {
+    if (!userId) return;
+    localStorage.setItem('user_id', userId);
+  }
+
+  // ── LOAD REAL MOVIES FROM API ────────────────────
+  async function loadMovies() {
+    const response = await fetch('http://localhost:3000/api/movies');
+    const movies = await response.json();
+    const row = document.getElementById('cardsRow');
+    row.innerHTML = '';
+
+    movies.forEach((m, i) => {
+      const genres = m.genres ? m.genres.split(', ').slice(0, 2) : [];
+      const card = document.createElement('div');
+      card.className = 'movie-card';
+      card.style.animationDelay = (i * 0.08) + 's';
+      card.innerHTML = `
+        <div class="card-poster" style="background:#1a1a2e">
+          <img src="${m.poster_url}" 
+               style="width:100%;height:100%;object-fit:cover;border-radius:12px"
+               onerror="this.style.display='none'"/>
+          <div class="card-overlay"><div class="play-btn">▶</div></div>
+        </div>
+        <div class="card-title">${m.title}</div>
+        <div class="card-rating">★ <span>${m.rating}</span></div>
+        <div class="card-tags">
+          ${genres.map(t => `<span class="card-tag">${t}</span>`).join('')}
+        </div>
+      `;
+      // click card → go to movie detail page
+      card.onclick = () => {
+        window.location.href = `detail.html?id=${m.movie_id}`;
+      };
+      row.appendChild(card);
+    });
+  }
+
+  // ── SEARCH ──────────────────────────────────────
+  function fillSearch(el) {
+    document.getElementById('searchInput').value = el.textContent;
+    document.getElementById('searchInput').focus();
+  }
+
+  function handleSearch() {
+    const q = document.getElementById('searchInput').value.trim();
+    if (!q) { document.getElementById('searchInput').focus(); return; }
+    // redirect to results page with query in URL
+    window.location.href = `results.html?q=${encodeURIComponent(q)}`;
+  }
+
+  // ── ON PAGE LOAD ─────────────────────────────────
+  window.addEventListener('load', () => {
+    loadUsers();
+    loadMovies();
+  });
+  document.getElementById('searchInput').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') handleSearch();
+});
+</script>

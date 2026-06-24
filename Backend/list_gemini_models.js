@@ -7,11 +7,11 @@ async function listModels() {
 
     const data = await res.json();
 
-    console.log(JSON.stringify(data, null, 2));
-    console.log(data);
-    // for(let names of data.models){
-    //     console.log(names.name);
-    // }
+    // console.log(JSON.stringify(data, null, 2));
+    // console.log(data);
+    for(let names of data.models){
+        console.log(names.name);
+    }
 }
 
 listModels();

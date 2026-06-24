@@ -159,7 +159,11 @@
     <button class="nav-search-btn">✦ Search</button>
   </div>
   <div class="nav-right">
-    <button class="btn-signin">Sign In</button>
+    <select id="userSelect" onchange="switchUser(this.value)" style="
+    font-family:'DM Sans',sans-serif;font-size:13px;
+    background:rgba(255,255,255,0.05);border:1px solid var(--border);
+    color:var(--text);padding:8px 16px;border-radius:6px;cursor:pointer;outline:none;">
+    </select>
   </div>
 </nav>
 
@@ -250,19 +254,17 @@
         <div class="featured-plot">
           The presidencies of Kennedy and Johnson, the Vietnam War, the Watergate scandal and other defining events unfold from the perspective of an Alabama man with an extraordinary life journey.
         </div>
-        <div class="why-matched">
-          <div class="why-title">Why this matched</div>
-          <div class="why-tags">
-            <span class="why-tag">bittersweet tone</span>
-            <span class="why-tag">emotional ending</span>
-            <span class="why-tag">heartwarming journey</span>
-          </div>
-        </div>
+        
         <div class="featured-actions">
           <button class="btn-primary">♥ Add to Favorites</button>
           <button class="btn-secondary">+ Watchlist</button>
         </div>
       </div>
+    </div>
+
+    <div class="why-matched animate" id="aiBox" style="display:none">
+    <div class="why-title">✦ AI Explanation</div>
+    <p id="aiText" style="font-size:13px;font-weight:300;color:var(--muted);line-height:1.7;"></p>
     </div>
 
     <!-- Grid -->
@@ -280,7 +282,7 @@
   </main>
 </div>
 
-<script>
+<!-- <script>
   const movies = [
     { title: "The Green Mile", year: 1999, rating: "8.6", match: 89, tags: ["Drama","Fantasy"], bg: "linear-gradient(160deg,#0a1a0a,#1a3a1a,#0d2e0d)", why: ["gentle giant", "unexpected loss", "emotional depth"] },
     { title: "Good Will Hunting", year: 1997, rating: "8.3", match: 85, tags: ["Drama","Romance"], bg: "linear-gradient(160deg,#1a0d0a,#3a2010,#2e180d)", why: ["inner warmth", "bittersweet goodbye", "emotional growth"] },
@@ -324,7 +326,468 @@
     document.getElementById('yearSlider').value = 1970;
     document.getElementById('yearVal').textContent = '1970 – 2024';
     document.querySelectorAll('.rating-opt').forEach((o,i) => { o.classList.remove('active'); if(i===0) o.classList.add('active'); });
+  } -->
+<!-- </script>
+
+
+ <script>
+  const params = new URLSearchParams(window.location.search);
+  const query = params.get('q') || '';
+
+  // ── USERS DROPDOWN ──────────────────────────────
+  async function loadUsers() {
+    const response = await fetch('http://localhost:3000/api/users');
+    const users = await response.json();
+    const select = document.getElementById('userSelect');
+    select.innerHTML = '<option value="">Sign In</option>';
+    users.forEach(user => {
+      const option = document.createElement('option');
+      option.value = user.user_id;
+      option.textContent = user.username;
+      select.appendChild(option);
+    });
+    const savedId = localStorage.getItem('user_id');
+    if (savedId) select.value = savedId;
   }
+
+  function switchUser(userId) {
+    if (!userId) return;
+    localStorage.setItem('user_id', userId);
+  }
+
+  // ── TYPEWRITER EFFECT ────────────────────────────
+  function typeWriter(element, text, speed = 18) {
+    element.textContent = '';
+    let i = 0;
+    const timer = setInterval(() => {
+      element.textContent += text[i];
+      i++;
+      if (i >= text.length) clearInterval(timer);
+    }, speed);
+  }
+
+  // ── RENDER FEATURED CARD ─────────────────────────
+  function renderFeatured(movie, aiExplanation) {
+    const genres = movie.genres ? movie.genres.split(', ').slice(0, 3) : [];
+
+    document.querySelector('.featured-poster').innerHTML = `
+      <img src="${movie.poster_url}" 
+           style="width:100%;height:100%;object-fit:cover;" 
+           onerror="this.style.display='none'"/>
+      <div style="position:absolute;inset:0;background:linear-gradient(to right,transparent 60%,var(--surface))"></div>
+      <div class="featured-match">
+        <div class="match-circle">
+          <div class="match-pct">${movie.match_percentage}</div>
+          <div class="match-lbl">match</div>
+        </div>
+      </div>
+    `;
+
+    document.querySelector('.featured-title').textContent = movie.title;
+    document.querySelector('.featured-meta').innerHTML = `
+      <span>${movie.release_year || '—'}</span>
+      <span class="sep">|</span>
+      <span class="featured-rating">★ ${movie.rating}</span>
+    `;
+    document.querySelector('.featured-tags').innerHTML =
+      genres.map(g => `<span class="ftag">${g}</span>`).join('');
+    document.querySelector('.featured-plot').textContent = movie.description || '';
+
+    // AI explanation with typewriter
+    const whyBox = document.querySelector('.why-matched');
+    if (aiExplanation) {
+      whyBox.innerHTML = `
+        <div class="why-title">✦ AI Explanation</div>
+        <p id="aiText" style="font-size:13px;font-weight:300;color:var(--muted);line-height:1.7;"></p>
+      `;
+      setTimeout(() => typeWriter(document.getElementById('aiText'), aiExplanation), 300);
+    } else {
+      whyBox.style.display = 'none';
+    }
+
+    // wire up buttons
+    document.querySelector('.btn-primary').onclick = () => addToFavorites(movie.movie_id);
+    document.querySelector('.btn-secondary').onclick = () => addToWatchlist(movie.movie_id);
+    document.querySelector('.featured').onclick = (e) => {
+      if (e.target.closest('button')) return;
+      window.location.href = `detail.html?id=${movie.movie_id}`;
+    };
+  }
+
+  // ── RENDER GRID CARDS ────────────────────────────
+  function renderGrid(movies) {
+    const grid = document.getElementById('resultsGrid');
+    grid.innerHTML = '';
+    movies.forEach((m, i) => {
+      const genres = m.genres ? m.genres.split(', ').slice(0, 2) : [];
+      const card = document.createElement('div');
+      card.className = 'movie-card animate';
+      card.style.animationDelay = (0.25 + i * 0.06) + 's';
+      card.innerHTML = `
+        <div class="card-poster" style="background:#1a1a2e">
+          <img src="${m.poster_url}" 
+               style="width:100%;height:100%;object-fit:cover;border-radius:10px"
+               onerror="this.style.display='none'"/>
+          <div class="match-badge">${m.match_percentage}%</div>
+          <div class="card-overlay"><div class="play-btn">▶</div></div>
+        </div>
+        <div class="card-title">${m.title}</div>
+        <div class="card-rating">★ <span>${m.rating}</span></div>
+        <div class="card-tags">
+          ${genres.map(t => `<span class="card-tag">${t}</span>`).join('')}
+        </div>
+      `;
+      card.onclick = () => window.location.href = `detail.html?id=${m.movie_id}`;
+      grid.appendChild(card);
+    });
+  }
+
+  // ── FAVORITES & WATCHLIST ────────────────────────
+  async function addToFavorites(movieId) {
+    const userId = localStorage.getItem('user_id');
+    if (!userId) { alert('Please sign in first'); return; }
+    const res = await fetch('http://localhost:3000/api/favorites/toggle', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user_id: userId, movie_id: movieId })
+    });
+    const data = await res.json();
+    alert(data.status === 'added' ? '♥ Added to Favorites' : 'Removed from Favorites');
+  }
+
+  async function addToWatchlist(movieId) {
+    const userId = localStorage.getItem('user_id');
+    if (!userId) { alert('Please sign in first'); return; }
+    await fetch('http://localhost:3000/api/watchlist', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user_id: userId, movie_id: movieId })
+    });
+    alert('+ Added to Watchlist');
+  }
+
+  // ── SEARCH ───────────────────────────────────────
+  function handleSearch() {
+    const q = document.getElementById('navSearch').value.trim();
+    if (!q) return;
+    window.location.href = `results.html?q=${encodeURIComponent(q)}`;
+  }
+
+  document.querySelector('.nav-search-btn').onclick = handleSearch;
+  document.getElementById('navSearch').addEventListener('keydown', e => {
+    if (e.key === 'Enter') handleSearch();
+  });
+
+  // ── LOAD RESULTS ─────────────────────────────────
+  // async function loadResults() {
+  //   if (!query) return;
+
+  //   // show query in navbar and header
+  //   document.getElementById('navSearch').value = query;
+  //   document.querySelector('.query-phrase').textContent = `"${query}"`;
+
+  //   const res = await fetch(`http://localhost:3000/api/search?prompt=${encodeURIComponent(query)}`);
+  //   const data = await res.json();
+
+  //   // update result count
+  //   document.querySelector('.result-count').innerHTML =
+  //     `Showing <span>${data.result.length}</span> matches`;
+
+  //   // featured = first result
+  //   if (data.result.length > 0) {
+  //     renderFeatured(data.result[0], data.ai_explanation);
+  //     renderGrid(data.result.slice(1)); // rest go in grid
+  //   }
+
+    async function loadResults() {
+    if (!query) return;
+
+    document.getElementById('navSearch').value = query;
+    document.querySelector('.query-phrase').textContent = `"${query}"`;
+
+    // Step 1 — fetch search results first (fast)
+    const res = await fetch(`http://localhost:3000/api/search?prompt=${encodeURIComponent(query)}`);
+    const data = await res.json();
+
+    // Step 2 — render everything immediately
+    document.querySelector('.result-count').innerHTML =
+        `Showing <span>${data.result.length}</span> matches`;
+
+    if (data.result.length > 0) {
+        renderFeatured(data.result[0]);  // no AI yet
+        renderGrid(data.result.slice(1));
+    }
+
+    // Step 3 — show AI box with loading state
+    const aiBox = document.getElementById('aiBox');
+    const aiText = document.getElementById('aiText');
+    aiBox.style.display = 'block';
+    aiText.textContent = 'Generating AI explanation...';
+    aiText.style.opacity = '0.4';
+
+    // Step 4 — typewrite AI explanation when ready
+    if (data.ai_explanation) {
+        aiText.style.opacity = '1';
+        setTimeout(() => typeWriter(aiText, data.ai_explanation), 300);
+    }
+
+    // log search
+    const userId = localStorage.getItem('user_id');
+    fetch('http://localhost:3000/api/search-log', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            user_id: userId || null,
+            query_text: query,
+            results_returned: data.result.length
+        })
+    });
+  }
+
+    // log search
+    const userId = localStorage.getItem('user_id');
+    fetch('http://localhost:3000/api/search-log', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        user_id: userId || null,
+        query_text: query,
+        results_returned: data.result.length
+      })
+    });
+  }
+
+  // ── FILTERS ──────────────────────────────────────
+  function setRating(el) {
+    document.querySelectorAll('.rating-opt').forEach(o => o.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  function updateMatch(v) {
+    document.getElementById('matchLabel').textContent = v + '% and above';
+  }
+
+  function clearFilters() {
+    document.querySelectorAll('.genre-item input').forEach(c => c.checked = false);
+    document.getElementById('yearSlider').value = 1970;
+    document.getElementById('yearVal').textContent = '1970 – 2024';
+    document.querySelectorAll('.rating-opt').forEach((o, i) => {
+      o.classList.remove('active');
+      if (i === 0) o.classList.add('active');
+    });
+  }
+
+  // ── ON PAGE LOAD ─────────────────────────────────
+  window.addEventListener('load', () => {
+    loadUsers();
+    loadResults();
+  });
+</script> -->
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const query = params.get('q') || '';
+
+  // ── USERS DROPDOWN ──────────────────────────────
+  async function loadUsers() {
+    const response = await fetch('http://localhost:3000/api/users');
+    const users = await response.json();
+    const select = document.getElementById('userSelect');
+    select.innerHTML = '<option value="">Sign In</option>';
+    users.forEach(user => {
+      const option = document.createElement('option');
+      option.value = user.user_id;
+      option.textContent = user.username;
+      select.appendChild(option);
+    });
+    const savedId = localStorage.getItem('user_id');
+    if (savedId) select.value = savedId;
+  }
+
+  function switchUser(userId) {
+    if (!userId) return;
+    localStorage.setItem('user_id', userId);
+  }
+
+  // ── TYPEWRITER ───────────────────────────────────
+  function typeWriter(element, text, speed = 18) {
+    element.textContent = '';
+    let i = 0;
+    const timer = setInterval(() => {
+      element.textContent += text[i];
+      i++;
+      if (i >= text.length) clearInterval(timer);
+    }, speed);
+  }
+
+  // ── RENDER FEATURED ──────────────────────────────
+  function renderFeatured(movie) {
+    const genres = movie.genres ? movie.genres.split(', ').slice(0, 3) : [];
+
+    document.querySelector('.featured-poster').innerHTML = `
+      <img src="${movie.poster_url}"
+           style="width:100%;height:100%;object-fit:cover;"
+           onerror="this.style.display='none'"/>
+      <div style="position:absolute;inset:0;background:linear-gradient(to right,transparent 60%,var(--surface))"></div>
+      <div class="featured-match">
+        <div class="match-circle">
+          <div class="match-pct">${movie.match_percentage}</div>
+          <div class="match-lbl">match</div>
+        </div>
+      </div>
+    `;
+
+    document.querySelector('.featured-title').textContent = movie.title;
+    document.querySelector('.featured-meta').innerHTML = `
+      <span>${movie.release_year || '—'}</span>
+      <span class="sep">|</span>
+      <span class="featured-rating">★ ${movie.rating}</span>
+    `;
+    document.querySelector('.featured-tags').innerHTML =
+      genres.map(g => `<span class="ftag">${g}</span>`).join('');
+    document.querySelector('.featured-plot').textContent = movie.description || '';
+
+    document.querySelector('.btn-primary').onclick = () => addToFavorites(movie.movie_id);
+    document.querySelector('.btn-secondary').onclick = () => addToWatchlist(movie.movie_id);
+    document.querySelector('.featured').style.cursor = 'pointer';
+    document.querySelector('.featured').onclick = (e) => {
+      if (e.target.closest('button')) return;
+      window.location.href = `detail.html?id=${movie.movie_id}`;
+    };
+  }
+
+  // ── RENDER GRID ──────────────────────────────────
+  function renderGrid(movies) {
+    const grid = document.getElementById('resultsGrid');
+    grid.innerHTML = '';
+    movies.forEach((m, i) => {
+      const genres = m.genres ? m.genres.split(', ').slice(0, 2) : [];
+      const card = document.createElement('div');
+      card.className = 'movie-card animate';
+      card.style.animationDelay = (0.25 + i * 0.06) + 's';
+      card.innerHTML = `
+        <div class="card-poster" style="background:#1a1a2e">
+          <img src="${m.poster_url}"
+               style="width:100%;height:100%;object-fit:cover;border-radius:10px"
+               onerror="this.style.display='none'"/>
+          <div class="match-badge">${m.match_percentage}%</div>
+          <div class="card-overlay"><div class="play-btn">▶</div></div>
+        </div>
+        <div class="card-title">${m.title}</div>
+        <div class="card-rating">★ <span>${m.rating}</span></div>
+        <div class="card-tags">
+          ${genres.map(t => `<span class="card-tag">${t}</span>`).join('')}
+        </div>
+      `;
+      card.onclick = () => window.location.href = `detail.html?id=${m.movie_id}`;
+      grid.appendChild(card);
+    });
+  }
+
+  // ── FAVORITES & WATCHLIST ────────────────────────
+  async function addToFavorites(movieId) {
+    const userId = localStorage.getItem('user_id');
+    if (!userId) { alert('Please sign in first'); return; }
+    const res = await fetch('http://localhost:3000/api/favorites/toggle', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user_id: userId, movie_id: movieId })
+    });
+    const data = await res.json();
+    alert(data.status === 'added' ? '♥ Added to Favorites' : 'Removed from Favorites');
+  }
+
+  async function addToWatchlist(movieId) {
+    const userId = localStorage.getItem('user_id');
+    if (!userId) { alert('Please sign in first'); return; }
+    await fetch('http://localhost:3000/api/watchlist', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user_id: userId, movie_id: movieId })
+    });
+    alert('+ Added to Watchlist');
+  }
+
+  // ── SEARCH ───────────────────────────────────────
+  function handleSearch() {
+    const q = document.getElementById('navSearch').value.trim();
+    if (!q) return;
+    window.location.href = `results.html?q=${encodeURIComponent(q)}`;
+  }
+
+  document.querySelector('.nav-search-btn').onclick = handleSearch;
+  document.getElementById('navSearch').addEventListener('keydown', e => {
+    if (e.key === 'Enter') handleSearch();
+  });
+
+  // ── LOAD RESULTS ─────────────────────────────────
+  async function loadResults() {
+    if (!query) return;
+
+    document.getElementById('navSearch').value = query;
+    document.querySelector('.query-phrase').textContent = `"${query}"`;
+
+    const res = await fetch(`http://localhost:3000/api/search?prompt=${encodeURIComponent(query)}`);
+    const data = await res.json();
+
+    document.querySelector('.result-count').innerHTML =
+      `Showing <span>${data.result.length}</span> matches`;
+
+    if (data.result.length > 0) {
+      renderFeatured(data.result[0]);
+      renderGrid(data.result.slice(1));
+    }
+
+    // show AI explanation below featured card
+    const aiBox = document.getElementById('aiBox');
+    const aiText = document.getElementById('aiText');
+    aiBox.style.display = 'block';
+
+    if (data.ai_explanation) {
+      aiText.style.opacity = '1';
+      setTimeout(() => typeWriter(aiText, data.ai_explanation), 300);
+    } else {
+      aiText.textContent = 'No explanation available.';
+    }
+
+    // log search
+    const userId = localStorage.getItem('user_id');
+    fetch('http://localhost:3000/api/search-log', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        user_id: userId || null,
+        query_text: query,
+        results_returned: data.result.length
+      })
+    });
+  }
+
+  // ── FILTERS ──────────────────────────────────────
+  function setRating(el) {
+    document.querySelectorAll('.rating-opt').forEach(o => o.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  function updateMatch(v) {
+    document.getElementById('matchLabel').textContent = v + '% and above';
+  }
+
+  function clearFilters() {
+    document.querySelectorAll('.genre-item input').forEach(c => c.checked = false);
+    document.getElementById('yearSlider').value = 1970;
+    document.getElementById('yearVal').textContent = '1970 – 2024';
+    document.querySelectorAll('.rating-opt').forEach((o, i) => {
+      o.classList.remove('active');
+      if (i === 0) o.classList.add('active');
+    });
+  }
+
+  // ── ON PAGE LOAD ─────────────────────────────────
+  window.addEventListener('load', () => {
+    loadUsers();
+    loadResults();
+  });
 </script>
 </body>
 </html>
