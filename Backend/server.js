@@ -61,13 +61,20 @@ app.get('/api/search', async (req, res) => {
         const vector = data.embedding.values;
 
         const result = await pool.query(`
-            SELECT movie_id, title, rating, poster_url, description, release_year,
-            ROUND(CAST((1 - (description_vector <=> $1::vector)) * 100 AS numeric), 2) AS match_percentage
-            FROM movies
-            WHERE description_vector IS NOT NULL
-            ORDER BY description_vector <=> $1::vector
+            SELECT 
+                m.movie_id, m.title, m.rating, m.poster_url, 
+                m.description, m.release_year,
+                STRING_AGG(g.name, ', ') as genres,
+                ROUND(CAST((1 - (m.description_vector <=> $1::vector)) * 100 AS numeric), 2) AS match_percentage
+            FROM movies m
+            LEFT JOIN movie_genres mg ON m.movie_id = mg.movie_id
+            LEFT JOIN genres g ON mg.genre_id = g.genre_id
+            WHERE m.description_vector IS NOT NULL
+            GROUP BY m.movie_id, m.title, m.rating, m.poster_url, m.description, m.release_year
+            ORDER BY m.description_vector <=> $1::vector
             LIMIT 20
         `, [`[${vector.join(',')}]`]);
+
 
         // RAG — generate AI explanation for top match
         let aiExplanation = null;

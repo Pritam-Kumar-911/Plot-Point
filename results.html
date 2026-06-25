@@ -145,6 +145,34 @@
 
   @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
   .animate { animation: fadeUp 0.5s ease both; }
+
+  .loading-state{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  min-height:450px;
+  gap:24px;
+}
+
+.ai-loader{
+  width:60px;
+  height:60px;
+  border-radius:50%;
+  border:3px solid rgba(255,255,255,0.08);
+  border-top:3px solid var(--accent);
+  animation:spin 1s linear infinite;
+}
+
+.loading-text{
+  font-size:15px;
+  color:var(--accent);
+}
+
+@keyframes spin{
+  from{transform:rotate(0deg);}
+  to{transform:rotate(360deg);}
+}
 </style>
 </head>
 <body>
@@ -175,20 +203,14 @@
     <div>
       <div class="filter-group-title">Genre</div>
       <div class="genre-list">
-        <label class="genre-item"><input type="checkbox" checked><div class="genre-check"></div><span class="genre-label">Drama</span></label>
-        <label class="genre-item"><input type="checkbox"><div class="genre-check"></div><span class="genre-label">Romance</span></label>
-        <label class="genre-item"><input type="checkbox"><div class="genre-check"></div><span class="genre-label">Sci-Fi</span></label>
-        <label class="genre-item"><input type="checkbox"><div class="genre-check"></div><span class="genre-label">Thriller</span></label>
-        <label class="genre-item"><input type="checkbox"><div class="genre-check"></div><span class="genre-label">Crime</span></label>
-        <label class="genre-item"><input type="checkbox"><div class="genre-check"></div><span class="genre-label">Animation</span></label>
-        <label class="genre-item"><input type="checkbox"><div class="genre-check"></div><span class="genre-label">History</span></label>
+        
       </div>
     </div>
 
     <div>
       <div class="filter-group-title">Release Year</div>
       <div class="year-range">
-        <input type="range" min="1970" max="2024" value="1990" id="yearSlider" oninput="document.getElementById('yearVal').textContent=this.value+' – 2024'">
+        <input type="range" min="1970" max="2024" value="1990" id="yearSlider">
         <div class="year-labels"><span id="yearVal">1990 – 2024</span></div>
       </div>
     </div>
@@ -215,6 +237,13 @@
 
   <!-- Main -->
   <main class="main">
+
+    <div id="loadingState" class="loading-state">
+      <div class="ai-loader"></div>
+      <div class="loading-text">
+      <span id="loadingMessage">✦ Understanding your vibe...</span>
+      </div>
+    </div>
 
     <!-- Query header -->
     <div class="query-header animate">
@@ -720,9 +749,82 @@
     if (e.key === 'Enter') handleSearch();
   });
 
+  const loadingMessages = [
+  "✦ Parsing natural language query...",
+  "✦ Extracting semantic intent...",
+  "✦ Searching relevant results...",
+  "✦ Computing similarity scores...",
+  "✦ Ranking recommendations...",
+  "✦ Generating AI explanation...",
+  "✦ Finalizing results..."
+  ];
+
+  let loadingInterval;
+
+  function startLoadingAnimation() {
+    const el = document.getElementById('loadingMessage');
+    let index = 0;
+
+    loadingInterval = setInterval(() => {
+      index = (index + 1) % loadingMessages.length;
+      el.textContent = loadingMessages[index];
+    }, 1500);
+  }
+
+  function stopLoadingAnimation() {
+    clearInterval(loadingInterval);
+  }
+
+
+  // store all grid results here
+let allResults = [];
+
+// call this whenever any filter changes
+function applyFilters() {
+    const filtered = allResults.filter(movie => {
+        return matchesGenre(movie) && matchesYear(movie) && matchesRating(movie);
+    });
+    renderGrid(filtered);
+}
+
+function matchesGenre(movie) {
+    const checked = [];
+    document.querySelectorAll('.genre-item input:checked').forEach(cb => {
+        checked.push(cb.nextElementSibling.nextElementSibling.textContent);
+    });
+    if (checked.length === 0) return true; // no filter selected = show all
+    const movieGenres = movie.genres ? movie.genres.split(', ') : [];
+    return checked.some(g => movieGenres.includes(g));
+}
+
+function matchesYear(movie) {
+    const minYear = parseInt(document.getElementById('yearSlider').value);
+    return !movie.release_year || movie.release_year >= minYear;
+}
+
+function matchesRating(movie) {
+    const activeText = document.querySelector('.rating-opt.active').textContent.trim();
+    if (activeText.includes('Any')) return true;
+    if (activeText.includes('7.0')) return parseFloat(movie.rating) >= 7.0;
+    if (activeText.includes('8.0')) return parseFloat(movie.rating) >= 8.0;
+    if (activeText.includes('9.0')) return parseFloat(movie.rating) >= 9.0;
+    return true;
+}
+
   // ── LOAD RESULTS ─────────────────────────────────
   async function loadResults() {
     if (!query) return;
+
+    // Hide content
+    document.querySelector('.query-header').style.display = 'none';
+    document.querySelector('.featured').style.display = 'none';
+    document.querySelector('.grid-header').style.display = 'none';
+    document.getElementById('resultsGrid').style.display = 'none';
+
+    // Show loader
+    document.getElementById('loadingState').style.display = 'flex';
+    startLoadingAnimation();
+
 
     document.getElementById('navSearch').value = query;
     document.querySelector('.query-phrase').textContent = `"${query}"`;
@@ -730,13 +832,49 @@
     const res = await fetch(`http://localhost:3000/api/search?prompt=${encodeURIComponent(query)}`);
     const data = await res.json();
 
+    // populate genres from actual search results
+const genreSet = new Set();
+data.result.forEach(movie => {
+    if (movie.genres) {
+        movie.genres.split(', ').forEach(g => genreSet.add(g));
+    }
+});
+
+const genreList = document.querySelector('.genre-list');
+genreList.innerHTML = '';
+
+genreSet.forEach(genre => {
+    const label = document.createElement('label');
+    label.className = 'genre-item';
+    label.innerHTML = `
+        <input type="checkbox">
+        <div class="genre-check"></div>
+        <span class="genre-label">${genre}</span>
+    `;
+    genreList.appendChild(label);
+});
+
+// re-wire checkboxes after rebuilding
+document.querySelectorAll('.genre-item input').forEach(function(cb) {
+    cb.addEventListener('change', applyFilters);
+});
+
     document.querySelector('.result-count').innerHTML =
       `Showing <span>${data.result.length}</span> matches`;
 
     if (data.result.length > 0) {
-      renderFeatured(data.result[0]);
-      renderGrid(data.result.slice(1));
+    allResults = data.result.slice(1); // ← store globally
+    renderFeatured(data.result[0]);
+    renderGrid(allResults);
     }
+
+    stopLoadingAnimation();
+    document.getElementById('loadingState').style.display = 'none';
+
+    document.querySelector('.query-header').style.display = '';
+    document.querySelector('.featured').style.display = '';
+    document.querySelector('.grid-header').style.display = '';
+    document.getElementById('resultsGrid').style.display = '';
 
     // show AI explanation below featured card
     const aiBox = document.getElementById('aiBox');
@@ -764,29 +902,37 @@
   }
 
   // ── FILTERS ──────────────────────────────────────
-  function setRating(el) {
+  // WITH THIS
+function setRating(el) {
     document.querySelectorAll('.rating-opt').forEach(o => o.classList.remove('active'));
     el.classList.add('active');
-  }
+    applyFilters(); // ← added
+}
 
-  function updateMatch(v) {
+function updateMatch(v) {
     document.getElementById('matchLabel').textContent = v + '% and above';
-  }
+}
 
-  function clearFilters() {
+function clearFilters() {
     document.querySelectorAll('.genre-item input').forEach(c => c.checked = false);
     document.getElementById('yearSlider').value = 1970;
     document.getElementById('yearVal').textContent = '1970 – 2024';
     document.querySelectorAll('.rating-opt').forEach((o, i) => {
-      o.classList.remove('active');
-      if (i === 0) o.classList.add('active');
+        o.classList.remove('active');
+        if (i === 0) o.classList.add('active');
     });
-  }
+    renderGrid(allResults); // ← added
+}
 
   // ── ON PAGE LOAD ─────────────────────────────────
   window.addEventListener('load', () => {
     loadUsers();
     loadResults();
+
+     document.getElementById('yearSlider').addEventListener('input', function() {
+        document.getElementById('yearVal').textContent = this.value + ' – 2024';
+        applyFilters();
+    });
   });
 </script>
 </body>
