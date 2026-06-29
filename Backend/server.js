@@ -301,33 +301,74 @@ app.get('/api/ratings/:movie_id', async (req, res) => {
 });
 
 // ── MOVIE DETAIL ─────────────────────────────────────
-app.get('/api/movies/:id', async (req, res) => {
-    try {
-        const movie = await pool.query(`
-            SELECT m.*, STRING_AGG(DISTINCT g.name, ', ') as genres
-            FROM movies m
-            LEFT JOIN movie_genres mg ON m.movie_id = mg.movie_id
-            LEFT JOIN genres g ON mg.genre_id = g.genre_id
-            WHERE m.movie_id = $1
-            GROUP BY m.movie_id
-        `, [req.params.id]);
+// app.get('/api/movies/:id', async (req, res) => {
+//     try {
+//         const movie = await pool.query(`
+//             SELECT m.*, STRING_AGG(DISTINCT g.name, ', ') as genres
+//             FROM movies m
+//             LEFT JOIN movie_genres mg ON m.movie_id = mg.movie_id
+//             LEFT JOIN genres g ON mg.genre_id = g.genre_id
+//             WHERE m.movie_id = $1
+//             GROUP BY m.movie_id
+//         `, [req.params.id]);
 
-        const cast = await pool.query(`
-            SELECT cm.name, cm.role, mc.character_name, mc.billing_order
-            FROM movie_cast mc
-            JOIN cast_members cm ON mc.cast_id = cm.cast_id
-            WHERE mc.movie_id = $1
-            ORDER BY mc.billing_order
-        `, [req.params.id]);
+//         const cast = await pool.query(`
+//             SELECT cm.name, cm.role, mc.character_name, mc.billing_order
+//             FROM movie_cast mc
+//             JOIN cast_members cm ON mc.cast_id = cm.cast_id
+//             WHERE mc.movie_id = $1
+//             ORDER BY mc.billing_order
+//         `, [req.params.id]);
 
-        res.json({
-            movie: movie.rows[0],
-            cast: cast.rows
-        });
-    } catch (err) {
-        res.status(500).json({ message: err.message });
+//         res.json({
+//             movie: movie.rows[0],
+//             cast: cast.rows
+//         });
+//     } catch (err) {
+//         res.status(500).json({ message: err.message });
+//     }
+// });
+
+//movie details api fetch 
+app.get('/api/movies/:id' , async(req , res) => {
+    try{
+        const movies = await pool.query(`
+             SELECT m.movie_id , m.tmdb_id , m.imdb_id , m.title , m.description, m.release_year , m.runtime_mins , rating , m.poster_url, STRING_AGG(DISTINCT g.name, ', ') as genres
+             FROM movies m
+             inner JOIN movie_genres mg ON m.movie_id = mg.movie_id
+             inner JOIN genres g ON mg.genre_id = g.genre_id
+             WHERE m.movie_id = $1 group by m.movie_id;
+            `, [req.params.id]);
+
+            const cast = await pool.query(`
+             SELECT cm.name, cm.role, mc.character_name, mc.billing_order
+             FROM movie_cast mc
+             JOIN cast_members cm ON mc.cast_id = cm.cast_id
+             WHERE mc.movie_id = $1 and role = 'actor'
+             ORDER BY mc.billing_order
+            `, [req.params.id]);
+
+            const directors = await pool.query(`
+             SELECT cm.name, cm.role, mc.character_name, mc.billing_order
+             FROM movie_cast mc
+             JOIN cast_members cm ON mc.cast_id = cm.cast_id
+             WHERE mc.movie_id = $1
+             and role = 'director'
+            `, [req.params.id]);   
+
+
+            res.json({
+                movie : movies.rows[0],
+                cast : cast.rows,
+                directors : directors.rows
+            });
     }
-});
+    catch(err){
+        res.status(500).json({message: err.message});
+    }
+})
+
+
 
 // ── SEARCH LOGS ──────────────────────────────────────
 app.post('/api/search-log', async (req, res) => {

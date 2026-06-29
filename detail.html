@@ -1,0 +1,567 @@
+<!DOCTYPE html><html class="dark" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>PLOTPOINT | The Golden Gambit</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-dim": "#16130f",
+                      "on-secondary-fixed-variant": "#584400",
+                      "error": "#ffb4ab",
+                      "error-container": "#93000a",
+                      "inverse-surface": "#e9e1da",
+                      "surface-bright": "#3c3934",
+                      "primary-fixed": "#ffdea3",
+                      "primary-container": "#c8a96e",
+                      "background": "#0a0a0f",
+                      "surface-container-highest": "#38342f",
+                      "tertiary": "#bac7f2",
+                      "tertiary-fixed-dim": "#b8c5f0",
+                      "secondary-fixed": "#ffe08b",
+                      "inverse-primary": "#735b28",
+                      "primary-fixed-dim": "#e3c285",
+                      "surface-tint": "#e3c285",
+                      "on-primary-container": "#533d0c",
+                      "tertiary-container": "#9facd5",
+                      "on-secondary-fixed": "#241a00",
+                      "on-primary-fixed": "#261900",
+                      "on-tertiary-fixed": "#0b1a3b",
+                      "secondary-fixed-dim": "#f0c110",
+                      "on-surface": "#e9e1da",
+                      "on-primary": "#402d00",
+                      "on-surface-variant": "#d0c5b5",
+                      "primary": "#c8a96e",
+                      "on-tertiary": "#222f51",
+                      "on-secondary-container": "#5f4a00",
+                      "on-error-container": "#ffdad6",
+                      "secondary": "#ffd65b",
+                      "outline": "#998f81",
+                      "surface-container": "#221f1b",
+                      "outline-variant": "#4d463a",
+                      "inverse-on-surface": "#33302b",
+                      "surface-container-low": "#1e1b17",
+                      "on-primary-fixed-variant": "#594312",
+                      "on-error": "#690005",
+                      "surface-container-lowest": "#100e0a",
+                      "on-secondary": "#3d2f00",
+                      "surface-variant": "#38342f",
+                      "tertiary-fixed": "#dae2ff",
+                      "on-tertiary-fixed-variant": "#394669",
+                      "surface": "#16130f",
+                      "surface-container-high": "#2d2925",
+                      "on-background": "#e9e1da",
+                      "secondary-container": "#e7b900",
+                      "on-tertiary-container": "#334063"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "stack-md": "16px",
+                      "stack-lg": "32px",
+                      "unit": "8px",
+                      "margin-mobile": "20px",
+                      "gutter": "24px",
+                      "margin-desktop": "64px",
+                      "stack-sm": "8px"
+              },
+              "fontFamily": {
+                      "display-md": ["Bebas Neue"],
+                      "headline-lg-mobile": ["Bebas Neue"],
+                      "display-lg": ["Bebas Neue"],
+                      "label-sm": ["DM Sans"],
+                      "body-lg": ["DM Sans"],
+                      "headline-lg": ["Bebas Neue"],
+                      "title-md": ["DM Sans"],
+                      "body-md": ["DM Sans"]
+              },
+              "fontSize": {
+                      "display-md": ["48px", {"lineHeight": "48px", "letterSpacing": "0.02em", "fontWeight": "400"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "28px", "letterSpacing": "0.04em", "fontWeight": "400"}],
+                      "display-lg": ["64px", {"lineHeight": "64px", "letterSpacing": "0.02em", "fontWeight": "400"}],
+                      "label-sm": ["11px", {"lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                      "body-lg": ["15px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-lg": ["28px", {"lineHeight": "32px", "letterSpacing": "0.04em", "fontWeight": "400"}],
+                      "title-md": ["16px", {"lineHeight": "22px", "fontWeight": "700"}],
+                      "body-md": ["13px", {"lineHeight": "20px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        body {
+            background-color: #0a0a0f;
+            color: #e9e1da;
+            overflow-x: hidden;
+        }
+        .hero-gradient {
+            background: linear-gradient(0deg, #0a0a0f 0%, rgba(10, 10, 15, 0.8) 50%, rgba(10, 10, 15, 0) 100%),
+                        linear-gradient(90deg, #0a0a0f 0%, rgba(10, 10, 15, 0.4) 100%);
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px -10px rgba(200, 169, 110, 0.3);
+        }
+        .logo { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 3px; display: flex; align-items: center; gap: 8px; }
+        .logo-dot { width: 6px; height: 6px; background: #c8a96e; border-radius: 50%; animation: pulse 2s ease-in-out infinite; }
+        @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
+        
+        .nav-link-item { font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.5px; color: #6b6878; transition: color 0.2s; cursor: pointer; }
+        .nav-link-item:hover { color: #f0ece4; }
+        .nav-link-item.active { color: #c8a96e; }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .cast-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 100%);
+            border: 1px solid rgba(200, 169, 110, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .cast-card:hover {
+            border-color: rgba(200, 169, 110, 0.4);
+            background: linear-gradient(135deg, rgba(200,169,110,0.05) 0%, rgba(255,255,255,0.02) 100%);
+        }
+        .avatar-placeholder {
+            background: linear-gradient(180deg, #1e1b17 0%, #100e0a 100%);
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md selection:bg-primary selection:text-on-primary">
+<nav class="fixed top-0 left-0 right-0 z-50 bg-[rgba(10,10,15,0.8)] backdrop-blur-xl border-b border-white/[0.05]">
+<div class="max-w-[1100px] mx-auto flex items-center justify-between px-6 py-4">
+<div class="logo text-on-surface uppercase">Plot<span class="text-primary">Point</span><span class="logo-dot"></span></div>
+<ul class="hidden md:flex gap-8 list-none">
+<li class="nav-link-item active">Discover</li>
+<li class="nav-link-item">Explore</li>
+<li class="nav-link-item">My List</li>
+<li class="nav-link-item">Dashboard</li>
+</ul>
+<div class="flex items-center gap-4">
+<button class="text-on-surface px-5 py-1.5 rounded-full border border-white/[0.1] font-label-sm hover:bg-white/[0.05] transition-all uppercase tracking-widest text-[10px]">Sign In</button>
+</div>
+</div>
+</nav>
+<main class="pt-0">
+<!-- Content Container -->
+<div class="max-w-[1100px] mx-auto px-6">
+<!-- Section 1: Hero Refinement -->
+<section class="relative min-h-[500px] w-full flex items-center pt-24 pb-12 overflow-hidden">
+<div class="absolute inset-0 z-0">
+<img class="absolute w-full h-full object-cover scale-110 opacity-20 blur-3xl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJwh3hEMveyFW62kWkzjSg1xnDw6pCujBglB3kuULHtI7QAHBtYXlzZ4Nx3ihVFTa_r_kDKK5BCEfqer-8n2nO_DhuMOwJ8fowhO35uHicEXk3H7TLoqMs9NEVt4NtJr5vSus2tHVSweEPDZXDUqY-a_v7GTllBak23QW-wlkOjL2ccB_b4FPh-eZVw8glUwGM8mRN6uPtK9mlaeqxeLkgcAd92hKtR4EAv6_e9uyBeeKGW4te75fE_15C-E2DvvpqTf_BUGRwWQ">
+<div class="absolute inset-0 hero-gradient z-10"></div>
+</div>
+<div class="relative z-20 w-full grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-10 items-center">
+<!-- High-end Poster Display -->
+<div class="relative group mx-auto lg:mx-0">
+<div class="absolute -inset-1 bg-primary/20 blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
+<div class="relative w-[220px] h-[330px] rounded-lg overflow-hidden shadow-xl border border-white/10">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Official movie poster for 'The Golden Gambit'" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJwh3hEMveyFW62kWkzjSg1xnDw6pCujBglB3kuULHtI7QAHBtYXlzZ4Nx3ihVFTa_r_kDKK5BCEfqer-8n2nO_DhuMOwJ8fowhO35uHicEXk3H7TLoqMs9NEVt4NtJr5vSus2tHVSweEPDZXDUqY-a_v7GTllBak23QW-wlkOjL2ccB_b4FPh-eZVw8glUwGM8mRN6uPtK9mlaeqxeLkgcAd92hKtR4EAv6_e9uyBeeKGW4te75fE_15C-E2DvvpqTf_BUGRwWQ" id="movie-poster">
+</div>
+</div>
+<!-- Elevated Info Content -->
+<div class="flex flex-col gap-6">
+<div class="flex flex-col gap-1">
+<span class="text-primary font-label-sm tracking-[0.4em] uppercase text-[9px]">A PlotPoint Original</span>
+<h1 class="font-display-lg text-4xl md:text-5xl text-white leading-[1.1] uppercase tracking-tight" id="movie-title">The Golden</h1>
+</div>
+<div class="flex flex-wrap items-center gap-4 font-label-sm py-3 border-y border-white/5">
+<div class="flex items-center text-primary">
+<span class="material-symbols-outlined fill text-lg" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="ml-1.5 text-on-surface text-base font-bold">4.8</span>
+<span class="text-on-surface-variant/50 ml-1 text-xs">/ 5</span>
+</div>
+<div class="flex items-center gap-1.5 px-2 py-0.5 bg-black/40 rounded border border-white/5"><span class="text-primary font-bold tracking-tighter text-[9px]">IMDb</span><span class="rating-imdb text-white font-bold text-[9px]">8.7</span></div><div class="h-3 w-[1px] bg-white/10"></div>
+<span class="movie-runtime text-on-surface-variant uppercase tracking-widest text-[10px]">2h 15m</span>
+<div class="h-3 w-[1px] bg-white/10"></div>
+<span class="movie-year uppercase tracking-widest text-[10px]">2024</span>
+<div class="genre-div flex gap-2">
+<!-- <span class="movie-genre px-2.5 py-0.5 bg-primary/10 border border-primary/20 rounded text-[8px] font-bold text-primary tracking-widest uppercase">Drama</span> -->
+<!-- <span class="px-2.5 py-0.5 bg-primary/10 border border-primary/20 rounded text-[8px] font-bold text-primary tracking-widest uppercase">Thriller</span> -->
+</div>
+</div>
+<p class="font-body-lg text-base text-on-surface-variant leading-relaxed max-w-xl font-light" id="movie-description">
+                            A high-stakes chess prodigy is pulled into a world of international espionage where every move could be his last. In a game with no rules, he must outsmart the masters of deception.
+                        </p>
+<div class="flex flex-wrap gap-4 mt-2">
+<button class="bg-primary hover:bg-primary/90 text-[#0a0a0f] rounded-full font-label-sm uppercase flex items-center gap-2.5 transition-all transform active:scale-95 shadow-xl shadow-primary/10 text-[11px] px-5 py-2.5">
+<span class="material-symbols-outlined fill text-lg" style="font-variation-settings: 'FILL' 1;">favorite</span>
+                                Add to Favorites
+                            </button>
+<button class="border border-white/20 hover:border-white/40 bg-white/5 text-on-surface rounded-full font-label-sm uppercase flex items-center gap-2.5 transition-all transform active:scale-95 backdrop-blur-sm text-[11px] px-5 py-2.5">
+<span class="material-symbols-outlined text-lg">add</span>
+                                Watchlist
+                            </button><button class="border border-white/20 hover:border-white/40 bg-white/5 text-on-surface rounded-full font-label-sm uppercase flex items-center gap-2.5 transition-all transform active:scale-95 backdrop-blur-sm text-[11px] px-5 py-2.5"><span class="material-symbols-outlined text-lg">open_in_new</span>View on IMDb</button>
+
+</div>
+</div>
+</div>
+</section>
+<!-- Section 2: Cast & Crew Elevation -->
+<section class="cast-container py-16">
+<div class="flex justify-between items-end mb-8">
+<div class="flex flex-col gap-1">
+<span class="text-primary font-label-sm tracking-[0.2em] uppercase text-[9px]">The Ensemble</span>
+<h2 class="font-headline-lg text-2xl text-white uppercase tracking-wider">Cast &amp; Crew</h2>
+</div>
+<div class="hidden md:flex gap-3">
+<button class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-white/50 hover:text-primary hover:border-primary transition-all"><span class="material-symbols-outlined text-sm">chevron_left</span></button>
+<button class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-white/50 hover:text-primary hover:border-primary transition-all"><span class="material-symbols-outlined text-sm">chevron_right</span></button>
+</div>
+</div>
+<div class="flex gap-4 overflow-x-auto hide-scrollbar pb-6">
+<!-- Director Card (Premium) -->
+<!-- <div class="cast-card flex flex-col rounded-xl group cursor-pointer relative overflow-hidden border border-white/[0.05] bg-white/[0.03] backdrop-blur-sm transition-all hover:bg-white/[0.08] p-3">
+
+
+<div class="flex flex-col gap-0.5">
+<p class="crew-director font-title-md text-white text-sm leading-tight">Christopher Nolan</p>
+<p class="text-primary text-[9px] font-bold uppercase tracking-[0.2em]">Director</p>
+</div>
+</div> -->
+<!-- Actor Cards -->
+<!-- <div class="cast-card flex flex-col rounded-xl group cursor-pointer relative overflow-hidden border border-white/[0.05] bg-white/[0.03] backdrop-blur-sm transition-all hover:bg-white/[0.08] p-3">
+
+<div class="flex flex-col gap-0.5">
+<p class="font-title-md text-white text-sm leading-tight">Michael Chen</p>
+<p class="text-on-surface-variant/60 text-[9px] font-medium uppercase tracking-[0.1em] italic">actor</p>
+</div>
+</div>
+<div class="cast-card flex flex-col rounded-xl group cursor-pointer relative overflow-hidden border border-white/[0.05] bg-white/[0.03] backdrop-blur-sm transition-all hover:bg-white/[0.08] p-3">
+
+<div class="flex flex-col gap-0.5">
+<p class="font-title-md text-white text-sm leading-tight">Sofia Rossi</p>
+<p class="text-on-surface-variant/60 text-[9px] font-medium uppercase tracking-[0.1em] italic">as The Handler</p>
+</div>
+</div>
+<div class="cast-card flex flex-col rounded-xl group cursor-pointer relative overflow-hidden border border-white/[0.05] bg-white/[0.03] backdrop-blur-sm transition-all hover:bg-white/[0.08] p-3">
+
+<div class="flex flex-col gap-0.5">
+<p class="font-title-md text-white text-sm leading-tight">James Sterling</p>
+<p class="text-on-surface-variant/60 text-[9px] font-medium uppercase tracking-[0.1em] italic">as The Mastermind</p>
+</div>
+</div>
+<div class="cast-card flex flex-col rounded-xl group cursor-pointer relative overflow-hidden border border-white/[0.05] bg-white/[0.03] backdrop-blur-sm transition-all hover:bg-white/[0.08] p-3">
+
+<div class="flex flex-col gap-0.5">
+<p class="font-title-md text-white text-sm leading-tight">Elena Vanya</p>
+<p class="text-on-surface-variant/60 text-[9px] font-medium uppercase tracking-[0.1em] italic">as Field Operative</p>
+</div>
+</div> -->
+</div>
+</section>
+<!-- Section 3: Restructured Layout (Grid-based) -->
+<section class="py-12">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+<!-- Left Main Column (Reviews) -->
+<div class="lg:col-span-8 flex flex-col gap-10">
+<div class="flex flex-col gap-6">
+<h3 class="font-headline-lg text-2xl text-white uppercase tracking-widest border-l-3 border-primary pl-5">User Reviews</h3>
+<!-- Post Review Card -->
+<div class="glass-panel rounded-xl p-6">
+<p class="font-label-sm text-primary mb-3 uppercase tracking-[0.2em] text-[9px]">Share your perspective</p>
+<textarea class="w-full bg-black/40 border-white/5 rounded-lg text-on-surface placeholder:text-on-surface-variant/30 focus:ring-primary focus:border-primary transition-all p-5 min-h-[100px] text-sm" placeholder="What are your thoughts on the film?"></textarea>
+<div class="flex justify-end mt-3">
+<button class="bg-primary text-[#0a0a0f] px-8 py-2.5 rounded-full font-label-sm uppercase hover:bg-primary/90 transition-all transform active:scale-95 shadow-lg shadow-primary/5 text-[11px]">Post Review</button>
+</div>
+</div>
+<!-- Review List -->
+<div class="flex flex-col gap-4">
+<div class="glass-panel rounded-xl p-6 flex flex-col gap-3 border border-white/5">
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary font-bold uppercase text-xs">AD</div>
+<div>
+<p class="font-title-md text-white text-sm">Alex D.</p>
+<p class="text-[9px] text-on-surface-variant/50 uppercase tracking-widest font-medium">March 14, 2024</p>
+</div>
+</div>
+<div class="flex text-primary">
+<span class="material-symbols-outlined fill text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined fill text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined fill text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined fill text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined fill text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+<p class="text-on-surface-variant leading-relaxed text-sm">Masterpiece of suspense! The cinematography is breathtaking and the plot keeps you guessing until the very last frame. Nolan has done it again.</p>
+</div>
+<div class="glass-panel rounded-xl p-6 flex flex-col gap-3 opacity-70 hover:opacity-100 transition-opacity">
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white font-bold uppercase text-xs">SK</div>
+<div>
+<p class="font-title-md text-white text-sm">Sarah K.</p>
+<p class="text-[9px] text-on-surface-variant/50 uppercase tracking-widest font-medium">March 10, 2024</p>
+</div>
+</div>
+<div class="flex text-primary">
+<span class="material-symbols-outlined fill text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined fill text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined fill text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined fill text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-xs">star</span>
+</div>
+</div>
+<p class="text-on-surface-variant leading-relaxed text-sm">Intense atmosphere. The chess metaphors are a bit heavy-handed but the performance by Michael Chen is absolutely stellar.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Side Sidebar (Insights & Details) -->
+<div class="lg:col-span-4 flex flex-col gap-6">
+<!-- Rating Insights Side Card -->
+<div class="glass-panel rounded-xl p-5 border-t-2 border-primary bg-white/[0.03] backdrop-blur-xl">
+<h4 class="font-headline-lg text-lg text-white mb-6 uppercase tracking-widest">Rating Insights</h4>
+<div class="flex flex-col gap-6">
+<div class="flex flex-col gap-2">
+<div class="flex justify-between items-end">
+<span class="font-label-sm text-primary uppercase tracking-[0.2em] text-[9px]">IMDb Rating</span>
+<div class="flex items-baseline gap-1">
+<span class="rating-imdb text-xl font-display-md text-white">8.7</span>
+<span class="text-[9px] text-on-surface-variant/40">/ 10</span>
+</div>
+</div>
+<div class="h-1 w-full bg-white/5 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[87%] shadow-[0_0_10px_rgba(200,169,110,0.4)]"></div>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex justify-between items-end">
+<span class="font-label-sm text-primary uppercase tracking-[0.2em] text-[9px]">Platform User</span>
+<div class="flex items-baseline gap-1">
+<span class="text-xl font-display-md text-white">4.8</span>
+<span class="text-[9px] text-on-surface-variant/40">/ 5.0</span>
+</div>
+</div>
+<div class="h-1 w-full bg-white/5 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[96%] shadow-[0_0_10px_rgba(200,169,110,0.4)]"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Film Details Sidebar -->
+<div class="bg-[#1a1a20] rounded-xl p-6 border border-white/5">
+<h4 class="font-label-sm text-primary uppercase tracking-[0.3em] mb-6 text-[10px] border-b border-white/5 pb-3">Production Specs</h4>
+<div class="flex flex-col gap-5">
+<div class="flex justify-between items-center group">
+<span class="text-on-surface-variant/60 text-[10px] uppercase tracking-widest">Release Year</span>
+<span class="movie-year text-white font-bold text-xs tracking-widest">2024</span>
+</div>
+<div class="flex justify-between items-center group">
+<span class="text-on-surface-variant/60 text-[10px] uppercase tracking-widest">Running Time</span>
+<span class="movie-runtime font-bold text-xs tracking-widest">135 min</span>
+</div>
+<div class="flex justify-between items-center group">
+<span class="text-on-surface-variant/60 text-[10px] uppercase tracking-widest">Director</span>
+<span class="cast-director font-bold text-xs tracking-widest">C. Nolan</span>
+</div>
+<div class="flex justify-between items-center group">
+<span class="text-on-surface-variant/60 text-[10px] uppercase tracking-widest">IMDb ID</span>
+<span class="movie-imdbId text-on-surface-variant font-mono text-[9px] bg-white/5 px-2 py-0.5 rounded">tt1234567</span>
+</div>
+</div>
+</div>
+<!-- Quick Rate Section -->
+<div class="glass-panel rounded-xl p-6 flex flex-col items-center gap-5 text-center">
+<h4 class="font-label-sm text-on-surface-variant uppercase tracking-[0.2em] text-[9px]">Personal Rating</h4>
+<div class="flex gap-1.5">
+<button class="material-symbols-outlined text-2xl text-white/10 hover:text-primary transition-colors cursor-pointer">star</button>
+<button class="material-symbols-outlined text-2xl text-white/10 hover:text-primary transition-colors cursor-pointer">star</button>
+<button class="material-symbols-outlined text-2xl text-white/10 hover:text-primary transition-colors cursor-pointer">star</button>
+<button class="material-symbols-outlined text-2xl text-white/10 hover:text-primary transition-colors cursor-pointer">star</button>
+<button class="material-symbols-outlined text-2xl text-white/10 hover:text-primary transition-colors cursor-pointer">star</button>
+</div>
+<button class="w-full bg-white/5 text-on-surface border border-white/10 py-2.5 rounded-full font-label-sm uppercase hover:bg-primary hover:text-[#0a0a0f] hover:border-primary transition-all text-[11px]">Submit Rating</button>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full mt-8 border-t border-white/5 bg-[#050508] py-12">
+<div class="max-w-[1100px] mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
+<div class="flex flex-col items-center md:items-start gap-2">
+<span class="logo text-2xl text-white uppercase tracking-[0.2em]">Plot<span class="text-primary">Point</span></span>
+<p class="font-body-md text-on-surface-variant/40 uppercase tracking-[0.3em] text-[8px]">© 2024 PLOTPOINT CINEMATICS. PREMIUM STORYTELLING.</p>
+</div>
+<div class="flex flex-wrap justify-center gap-8">
+<a class="text-[10px] font-medium text-on-surface-variant uppercase tracking-widest hover:text-primary transition-colors" href="#">Legal</a>
+<a class="text-[10px] font-medium text-on-surface-variant uppercase tracking-widest hover:text-primary transition-colors" href="#">Privacy</a>
+<a class="text-[10px] font-medium text-on-surface-variant uppercase tracking-widest hover:text-primary transition-colors" href="#">Contact</a>
+<a class="text-[10px] font-medium text-on-surface-variant uppercase tracking-widest hover:text-primary transition-colors" href="#">Membership</a>
+</div>
+</div>
+</footer>
+<script>
+        // Simple star rating interaction
+        const starButtons = document.querySelectorAll('.material-symbols-outlined.cursor-pointer');
+        starButtons.forEach((star, index) => {
+            star.addEventListener('mouseenter', () => {
+                starButtons.forEach((s, i) => {
+                    if(i <= index) {
+                        s.classList.add('text-primary');
+                        s.classList.remove('text-white/10');
+                    }
+                });
+            });
+            star.addEventListener('mouseleave', () => {
+                starButtons.forEach(s => {
+                    if(s.style.fontVariationSettings !== "'FILL' 1") {
+                        s.classList.remove('text-primary');
+                        s.classList.add('text-white/10');
+                    }
+                });
+            });
+            star.addEventListener('click', () => {
+                starButtons.forEach((s, i) => {
+                    if(i <= index) {
+                        s.style.fontVariationSettings = "'FILL' 1";
+                        s.classList.add('text-primary');
+                        s.classList.remove('text-white/10');
+                    } else {
+                        s.style.fontVariationSettings = "'FILL' 0";
+                        s.classList.remove('text-primary');
+                        s.classList.add('text-white/10');
+                    }
+                });
+            });
+        });
+
+        const params = new URLSearchParams(window.location.search);
+        const movies_id = params.get('id');
+        console.log(movies_id);
+
+        async function loadMovies(){
+            const fetchmovies = await fetch(`http://localhost:3000/api/movies/${movies_id}`);
+            const data  = await fetchmovies.json();
+            console.log(data);
+            console.log(data.movie.movie_id);
+            console.log(data.movie.rating);
+            console.log(data.movie.release_year);
+            console.log(data.movie.genres);
+            const genresArr = data.movie.genres.split(", ");
+            console.log(data.movie.imdb_id);
+            console.log(data.directors.name);
+            data.directors.forEach(element => {
+                console.log(element.name);
+            })
+
+            document.querySelector("#movie-title").innerHTML = data.movie.title;
+
+            document.querySelectorAll(".rating-imdb").forEach(element => {
+            element.textContent = data.movie.rating;
+            });
+
+            document.querySelector("#movie-description").innerHTML = data.movie.description;
+            document.querySelector("#movie-poster").src = data.movie.poster_url;
+
+            document.querySelectorAll(".movie-runtime").forEach(element => {
+                element.textContent = data.movie.runtime_mins + ' mins'
+            })
+
+            document.querySelectorAll(".movie-year").forEach(element => {
+                element.innerHTML = data.movie.release_year;
+            })
+
+            const genres = document.querySelector(".genre-div");
+            
+            genresArr.forEach(element => {
+                const span = document.createElement("span");
+                span.innerHTML = element;
+                span.className = "movie-genre px-2.5 py-0.5 bg-primary/10 border border-primary/20 rounded text-[8px] font-bold text-primary tracking-widest uppercase";
+                genres.appendChild(span);
+            })
+
+            document.querySelector(".movie-imdbId").innerHTML = data.movie.imdb_id;
+
+            // const outerElement = document.querySelector(".crew-director");
+
+            //     data.directors.forEach(element => {
+            //      outerElement.innerHTML = element.name;
+                
+            // })
+
+            const actors = document.querySelector(".cast-container .flex.gap-4");
+
+            data.directors.forEach(element => {
+                const actor = document.createElement("div");
+                actor.className = "cast-card flex flex-col rounded-xl group cursor-pointer relative overflow-hidden border border-white/[0.05] bg-white/[0.03] backdrop-blur-sm transition-all hover:bg-white/[0.08] p-3"
+
+                const innerDiv = document.createElement("div");
+                innerDiv.className = "flex flex-col gap-0.5";
+                actor.appendChild(innerDiv);
+
+
+                const info = document.createElement("p")
+                info.innerHTML = element.name;
+                info.className = "font-title-md text-white text-sm leading-tight";
+                innerDiv.appendChild(info);
+
+                const bottom = document.createElement("p");
+                bottom.innerHTML = 'director';
+                bottom.className = "text-primary text-[9px] font-bold uppercase tracking-[0.2em]";
+                innerDiv.appendChild(bottom);
+
+                actors.appendChild(actor);
+            })
+
+            data.cast.forEach(element => {
+                // const actor = document.createElement("p")
+                // actor.innerHTML = element.name;
+                // actor.className = "font-title-md text-white text-sm leading-tight";
+                // actors.appendChild(actor);
+
+                // const bottom = document.createElement("p");
+                // bottom.innerHTML = 'actor';
+                // bottom.className = "text-on-surface-variant/60 text-[9px] font-medium uppercase tracking-[0.1em] italic";
+                // actors.appendChild(bottom);
+
+                const actor = document.createElement("div");
+                actor.className = "cast-card flex flex-col rounded-xl group cursor-pointer relative overflow-hidden border border-white/[0.05] bg-white/[0.03] backdrop-blur-sm transition-all hover:bg-white/[0.08] p-3"
+
+                const innerDiv = document.createElement("div");
+                innerDiv.className = "flex flex-col gap-0.5";
+                actor.appendChild(innerDiv);
+
+
+                const info = document.createElement("p")
+                info.innerHTML = element.name;
+                info.className = "font-title-md text-white text-sm leading-tight";
+                innerDiv.appendChild(info);
+
+                const bottom = document.createElement("p");
+                bottom.innerHTML = 'actor';
+                bottom.className = "text-on-surface-variant/60 text-[9px] font-medium uppercase tracking-[0.1em] italic";
+                innerDiv.appendChild(bottom);
+
+                actors.appendChild(actor);
+            })
+
+        }
+        loadMovies();
+    </script>
+
+
+</body></html>
