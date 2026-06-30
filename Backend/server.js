@@ -221,23 +221,41 @@ app.patch('/api/watchlist/watched', async (req, res) => {
 });
 
 // ── REVIEWS ─────────────────────────────────────────
-app.post('/api/reviews', async (req, res) => {
-    const { user_id, movie_id, review_text } = req.body;
-    try {
+// app.post('/api/reviews', async (req, res) => {
+//     const { user_id, movie_id, review_text } = req.body;
+//     try {
+//         const result = await pool.query(`
+//             INSERT INTO reviews (user_id, movie_id, review_text)
+//             VALUES ($1, $2, $3) RETURNING *
+//         `, [user_id, movie_id, review_text]);
+//         res.status(201).json(result.rows[0]);
+//     } catch (err) {
+//         res.status(500).json({ message: err.message });
+//     }
+// });
+
+app.post('/api/reviews' , async(req , res) => {
+    const {user_id , movie_id , review_text} = req.body;
+    try{
         const result = await pool.query(`
-            INSERT INTO reviews (user_id, movie_id, review_text)
-            VALUES ($1, $2, $3) RETURNING *
-        `, [user_id, movie_id, review_text]);
-        res.status(201).json(result.rows[0]);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
+            INSERT INTO reviews(user_id , movie_id , review_text)
+            VALUES($1 , $2 , $3) 
+            ON CONFLICT (user_id, movie_id) 
+            DO UPDATE SET review_text = $3
+            RETURNING *
+            `, [user_id , movie_id , review_text]);
+            res.status(201).json(result.rows[0]);
+    }catch(err){
+        res.status(500).json({message: err.message});
     }
-});
+})
+
+
 
 app.get('/api/reviews/:movie_id', async (req, res) => {
     try {
         const result = await pool.query(`
-            SELECT r.review_id, r.review_text, r.created_at, u.username
+            SELECT r.user_id, r.review_id, r.review_text, r.created_at, u.username
             FROM reviews r
             JOIN users u ON r.user_id = u.user_id
             WHERE r.movie_id = $1

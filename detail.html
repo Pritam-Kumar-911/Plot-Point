@@ -188,7 +188,7 @@
 <div class="flex flex-wrap items-center gap-4 font-label-sm py-3 border-y border-white/5">
 <div class="flex items-center text-primary">
 <span class="material-symbols-outlined fill text-lg" style="font-variation-settings: 'FILL' 1;">star</span>
-<span class="ml-1.5 text-on-surface text-base font-bold">4.8</span>
+<span class="platform-rating ml-1.5 text-on-surface text-base font-bold">4.8</span>
 <span class="text-on-surface-variant/50 ml-1 text-xs">/ 5</span>
 </div>
 <div class="flex items-center gap-1.5 px-2 py-0.5 bg-black/40 rounded border border-white/5"><span class="text-primary font-bold tracking-tighter text-[9px]">IMDb</span><span class="rating-imdb text-white font-bold text-[9px]">8.7</span></div><div class="h-3 w-[1px] bg-white/10"></div>
@@ -204,14 +204,14 @@
                             A high-stakes chess prodigy is pulled into a world of international espionage where every move could be his last. In a game with no rules, he must outsmart the masters of deception.
                         </p>
 <div class="flex flex-wrap gap-4 mt-2">
-<button class="bg-primary hover:bg-primary/90 text-[#0a0a0f] rounded-full font-label-sm uppercase flex items-center gap-2.5 transition-all transform active:scale-95 shadow-xl shadow-primary/10 text-[11px] px-5 py-2.5">
+<button class="favourite-btn bg-primary hover:bg-primary/90 text-[#0a0a0f] rounded-full font-label-sm uppercase flex items-center gap-2.5 transition-all transform active:scale-95 shadow-xl shadow-primary/10 text-[11px] px-5 py-2.5">
 <span class="material-symbols-outlined fill text-lg" style="font-variation-settings: 'FILL' 1;">favorite</span>
                                 Add to Favorites
                             </button>
-<button class="border border-white/20 hover:border-white/40 bg-white/5 text-on-surface rounded-full font-label-sm uppercase flex items-center gap-2.5 transition-all transform active:scale-95 backdrop-blur-sm text-[11px] px-5 py-2.5">
+<button class="watchlist-btn border-white/20 hover:border-white/40 bg-white/5 text-on-surface rounded-full font-label-sm uppercase flex items-center gap-2.5 transition-all transform active:scale-95 backdrop-blur-sm text-[11px] px-5 py-2.5">
 <span class="material-symbols-outlined text-lg">add</span>
                                 Watchlist
-                            </button><button class="border border-white/20 hover:border-white/40 bg-white/5 text-on-surface rounded-full font-label-sm uppercase flex items-center gap-2.5 transition-all transform active:scale-95 backdrop-blur-sm text-[11px] px-5 py-2.5"><span class="material-symbols-outlined text-lg">open_in_new</span>View on IMDb</button>
+                            </button><button class="imdb-btn border border-white/20 hover:border-white/40 bg-white/5 text-on-surface rounded-full font-label-sm uppercase flex items-center gap-2.5 transition-all transform active:scale-95 backdrop-blur-sm text-[11px] px-5 py-2.5"><span class="material-symbols-outlined text-lg">open_in_new</span>View on IMDb</button>
 
 </div>
 </div>
@@ -280,16 +280,16 @@
 <!-- Post Review Card -->
 <div class="glass-panel rounded-xl p-6">
 <p class="font-label-sm text-primary mb-3 uppercase tracking-[0.2em] text-[9px]">Share your perspective</p>
-<textarea class="w-full bg-black/40 border-white/5 rounded-lg text-on-surface placeholder:text-on-surface-variant/30 focus:ring-primary focus:border-primary transition-all p-5 min-h-[100px] text-sm" placeholder="What are your thoughts on the film?"></textarea>
+<textarea class="text-box w-full bg-black/40 border-white/5 rounded-lg text-on-surface placeholder:text-on-surface-variant/30 focus:ring-primary focus:border-primary transition-all p-5 min-h-[100px] text-sm" placeholder="What are your thoughts on the film?"></textarea>
 <div class="flex justify-end mt-3">
-<button class="bg-primary text-[#0a0a0f] px-8 py-2.5 rounded-full font-label-sm uppercase hover:bg-primary/90 transition-all transform active:scale-95 shadow-lg shadow-primary/5 text-[11px]">Post Review</button>
+<button class="text-button bg-primary text-[#0a0a0f] px-8 py-2.5 rounded-full font-label-sm uppercase hover:bg-primary/90 transition-all transform active:scale-95 shadow-lg shadow-primary/5 text-[11px]">Post Review</button>
 </div>
 </div>
 <!-- Review List -->
-<div class="flex flex-col gap-4">
-<div class="glass-panel rounded-xl p-6 flex flex-col gap-3 border border-white/5">
-<div class="flex justify-between items-center">
-<div class="flex items-center gap-3">
+<div class="div1 flex flex-col gap-4">
+<div class="div2 glass-panel rounded-xl p-6 flex flex-col gap-3 border border-white/5">
+<div class="div3 flex justify-between items-center">
+<div class="div4 flex items-center gap-3">
 <div class="w-10 h-10 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary font-bold uppercase text-xs">AD</div>
 <div>
 <p class="font-title-md text-white text-sm">Alex D.</p>
@@ -374,7 +374,7 @@
 </div>
 <div class="flex justify-between items-center group">
 <span class="text-on-surface-variant/60 text-[10px] uppercase tracking-widest">Director</span>
-<span class="cast-director font-bold text-xs tracking-widest">C. Nolan</span>
+<span class="cast-director-box font-bold text-xs tracking-widest">C. Nolan</span>
 </div>
 <div class="flex justify-between items-center group">
 <span class="text-on-surface-variant/60 text-[10px] uppercase tracking-widest">IMDb ID</span>
@@ -392,7 +392,7 @@
 <button class="material-symbols-outlined text-2xl text-white/10 hover:text-primary transition-colors cursor-pointer">star</button>
 <button class="material-symbols-outlined text-2xl text-white/10 hover:text-primary transition-colors cursor-pointer">star</button>
 </div>
-<button class="w-full bg-white/5 text-on-surface border border-white/10 py-2.5 rounded-full font-label-sm uppercase hover:bg-primary hover:text-[#0a0a0f] hover:border-primary transition-all text-[11px]">Submit Rating</button>
+<button class="submit-btn w-full bg-white/5 text-on-surface border border-white/10 py-2.5 rounded-full font-label-sm uppercase hover:bg-primary hover:text-[#0a0a0f] hover:border-primary transition-all text-[11px]">Submit Rating</button>
 </div>
 </div>
 </div>
@@ -416,6 +416,8 @@
 </footer>
 <script>
         // Simple star rating interaction
+
+        let ID = 0;
         const starButtons = document.querySelectorAll('.material-symbols-outlined.cursor-pointer');
         starButtons.forEach((star, index) => {
             star.addEventListener('mouseenter', () => {
@@ -449,10 +451,12 @@
             });
         });
 
+        //got the movie ID from URL 
         const params = new URLSearchParams(window.location.search);
         const movies_id = params.get('id');
         console.log(movies_id);
 
+        
         async function loadMovies(){
             const fetchmovies = await fetch(`http://localhost:3000/api/movies/${movies_id}`);
             const data  = await fetchmovies.json();
@@ -463,7 +467,13 @@
             console.log(data.movie.genres);
             const genresArr = data.movie.genres.split(", ");
             console.log(data.movie.imdb_id);
-            console.log(data.directors.name);
+
+            //going to imdb page
+            document.querySelector(".imdb-btn").addEventListener("click" , () => {
+                const URL = `https://www.imdb.com/title/${data.movie.imdb_id}/?ref_=hm_tenup_i_2`;
+                window.open(URL, "_blank");
+            })
+
             data.directors.forEach(element => {
                 console.log(element.name);
             })
@@ -495,6 +505,7 @@
             })
 
             document.querySelector(".movie-imdbId").innerHTML = data.movie.imdb_id;
+            ID = data.movie.imdb_id;
 
             // const outerElement = document.querySelector(".crew-director");
 
@@ -559,8 +570,269 @@
                 actors.appendChild(actor);
             })
 
+
+            document.querySelector(".cast-director-box").innerHTML = data.directors[0].name;
+            console.log(data.directors[0].name);
+
+            
+            
         }
+        // async function postReview() {
+
+        //     console.log("Function called")
+        //     console.log(movies_id);
+        //     const savedId = localStorage.getItem('user_id');
+        //     console.log(savedId);
+        //     const text = document.querySelector(".text-box").value;
+        //     console.log(text);
+
+            
+        // }
+
+        //POST and PUT reviews
+        const savedId = localStorage.getItem('user_id');
+        document.querySelector(".text-button").addEventListener("click" , async()=>{
+                const textarea = document.querySelector(".text-box").value;
+                console.log(textarea);
+
+                const result = await fetch(`http://localhost:3000/api/reviews/${movies_id}`);
+                const reviews = await result.json();
+                const myReviews = reviews.find(r => r.user_id == savedId);
+
+                if(myReviews){
+                    const put = await fetch(`http://localhost:3000/api/reviews/${myReviews.review_id}` , {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            review_text: textarea
+                        })
+                    });
+                }
+                else{
+                    const res = await fetch("http://localhost:3000/api/reviews", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        user_id: savedId,
+                        movie_id: movies_id,
+                        review_text: textarea
+                    })
+                });
+                }
+
+                // const data = await res.json();
+                // console.log("check the error");
+                // console.log(data);
+                getReviews();
+            })
+
+
+        async function getReviews() {
+            try{
+                const Reviews = await fetch(`http://localhost:3000/api/reviews/${movies_id}`);
+                const results = await Reviews.json();
+                console.log("Check reviews");
+                console.log("RESULTS:", results); // ✅ add this
+
+                document.querySelector(".div1").innerHTML = "";
+
+                results.forEach(element => {
+
+
+                    const first = document.createElement('div');
+                    first.className = "flex flex-col gap-4 relative"
+
+                    const second = document.createElement('div');
+                    second.className = "glass-panel rounded-xl p-6 flex flex-col gap-3 border border-white/5 relative" ;
+                    first.appendChild(second);
+
+                    if (element.user_id == savedId) {
+                    console.log("checking for match");
+                    console.log("match found", element.user_id, savedId);
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.innerHTML = '✕';
+                    deleteBtn.className = "absolute top-4 right-4 text-on-surface-variant/40 hover:text-red-400 transition-colors text-sm w-6 h-6 flex items-center justify-center rounded-full hover:bg-white/5";
+                    deleteBtn.addEventListener('click', async () => {
+                        await fetch(`http://localhost:3000/api/reviews/${element.review_id}`, {
+                            method: "DELETE"
+                        });
+                        getReviews(); // refresh list
+                    });
+                    second.appendChild(deleteBtn);
+                    }
+
+                    const third = document.createElement('div');
+                    third.className = "flex justify-between items-center";
+                    second.appendChild(third);
+
+                    const fourth = document.createElement('div');
+                    fourth.className = "flex items-center gap-3"
+                    third.appendChild(fourth);
+
+                    const avatar = document.createElement('div');
+                    avatar.className = "w-10 h-10 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary font-bold uppercase text-xs"
+                    avatar.innerHTML = element.username.slice(0, 2).toUpperCase();
+                    fourth.append(avatar);
+
+                    const name = document.createElement('div');
+                    name.innerHTML = `
+                    <p class="font-title-md text-white text-sm">${element.username}</p>
+                    <p class="text-[9px] text-on-surface-variant/50 uppercase tracking-widest font-medium">${element.created_at.slice(0, 10)}</p>
+                    `;
+                    fourth.append(name);
+
+                   
+
+                    const reviewsDiv = document.createElement('div');
+                    reviewsDiv.innerHTML = `
+                    <p class="text-on-surface-variant leading-relaxed text-sm">${element.review_text}</p>
+                    `;
+                    second.appendChild(reviewsDiv);
+
+                    document.querySelector(".div1").appendChild(first);
+                
+                    })
+
+                    
+                    
+                    
+                console.log(results[0].review_id);
+            }
+            catch(error){
+                // res.status(500).JSON({message: error});
+                console.error(error);
+
+            }
+        }
+
+
+        //rating
+        let selectedRating = 0;
+
+        const ratingStars = document.querySelectorAll('.flex.gap-1\\.5 > button');
+
+        ratingStars.forEach((star, index) => {
+            star.addEventListener('click', () => {
+                selectedRating = index + 1; // store 1-5
+                console.log("Selected Rating:", selectedRating);
+            });
+        });
+        console.log(selectedRating);
+
+        document.querySelector(".submit-btn").addEventListener("click" , async() => {
+            console.log("Selected Rating Inside callback: " , selectedRating);
+            if(!savedId){
+                alert("Please sign in first");
+                return;
+            }
+            if(!selectedRating){
+                alert("Please select a rating first!");
+                return;
+            }
+            const postRating = await fetch(`http://localhost:3000/api/ratings` , {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    user_id: savedId,
+                    movie_id: movies_id,
+                    rating_value: selectedRating
+                })
+            });
+            alert("Rating added successfully!");
+            getRatings();
+            loadRatingComparison();
+        })
+
+        async function getRatings() {
+            try{
+            const Ratings = await fetch(`http://localhost:3000/api/ratings/${movies_id}`);
+            const response = await Ratings.json();
+            console.log("Rating Info");
+            console.log(response.average_rating);
+            console.log(Number(response.average_rating).toFixed(1));
+            if(response.average_rating == null){
+                document.querySelector(".platform-rating").innerHTML = "0.0";
+            }else{
+                document.querySelector(".platform-rating").innerHTML = Number(response.average_rating).toFixed(1);
+            }
+            }
+            catch(error){
+                console.log(error);
+            }
+        }
+
+
+        //adding to favourites 
+        document.querySelector(".favourite-btn").addEventListener("click" , async()=>{
+            const postFavourite = await fetch("http://localhost:3000/api/favorites/toggle" , {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json" 
+                },
+                body: JSON.stringify({
+                    user_id: savedId,
+                    movie_id: movies_id
+                })
+            });
+            const data = await postFavourite.json();
+            console.log(data.status);
+            if(data.status == "added"){
+                alert("Added to favorite");
+            }else{
+                alert("Removed from favorite");
+            }
+        })
+
+        //adding to watchlist
+        document.querySelector(".watchlist-btn").addEventListener("click" , async()=>{
+            try{
+                const postWatlist = await fetch("http://localhost:3000/api/watchlist" , {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        user_id: savedId,
+                        movie_id: movies_id
+                    })
+                })
+                alert("Added to Watchlist!");
+            }
+            catch(error){
+                console.log(error);
+            }
+        })
+        async function loadRatingComparison() {
+            const res = await fetch(`http://localhost:3000/api/ratings/${movies_id}`);
+            const ratings = await res.json();
+
+            const platformVal = parseFloat(ratings.average_rating) || 0;
+            const totalRatings = parseInt(ratings.total_ratings) || 0;
+
+            // find the "Platform User" rating display
+            const platformSpan = document.querySelectorAll('.text-xl.font-display-md.text-white')[1];
+            platformSpan.textContent = platformVal > 0 ? platformVal.toFixed(1) : '—';
+
+            // update the progress bar width
+            const platformBar = document.querySelectorAll('.h-full.bg-primary')[1];
+            platformBar.style.width = `${(platformVal / 5) * 100}%`;
+        }
+
+        
         loadMovies();
+        // postReview();
+        getReviews();
+        getRatings();
+        loadRatingComparison();
+
+        
+
     </script>
 
 
