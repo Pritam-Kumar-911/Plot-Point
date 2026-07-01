@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PlotPoint | My List</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="components/navbar.css">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface": "#0a0a0f",
+                        "primary": "#c8a96e",
+                        "outline": "#998f81",
+                        "outline-variant": "#4d463a",
+                        "on-surface": "#e9e1da",
+                        "on-surface-variant": "#6b6878",
+                        "surface-container-lowest": "#110e0a"
+                    },
+                    "borderRadius": {
+                        "lg": "10px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Bebas Neue"],
+                        "body": ["DM Sans"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #0a0a0f;
+            background-image: radial-gradient(circle at 50% -20%, rgba(107, 104, 120, 0.15) 0%, transparent 50%),
+                              radial-gradient(circle at 100% 100%, rgba(200, 169, 110, 0.05) 0%, transparent 50%);
+            background-attachment: fixed;
+            color: #e9e1da;
+            font-family: 'DM Sans', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .movie-card-hover {
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+        .movie-card-hover:hover {
+            transform: scale(1.05);
+            filter: drop-shadow(0 0 12px rgba(200, 169, 110, 0.3));
+            z-index: 10;
+        }
+
+        .section-line {
+            display: inline-block;
+            width: 24px;
+            height: 1px;
+            background-color: #c8a96e;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+
+        .remove-btn {
+            transition: all 0.2s;
+        }
+        .remove-btn:hover {
+            background-color: rgba(255, 80, 80, 0.85) !important;
+            border-color: rgba(255, 80, 80, 0.85) !important;
+        }
+    </style>
+</head>
+<body class="selection:bg-primary selection:text-surface">
+<div id="navbar"></div>
+
+<main class="min-h-screen px-6 py-12 md:px-16 lg:px-24 max-w-[1440px] mx-auto">
+
+  <!-- Page Header -->
+  <header class="mb-16">
+    <h1 class="font-headline text-5xl md:text-6xl text-on-surface tracking-wider uppercase mb-2">My List</h1>
+    <p class="text-base text-on-surface-variant max-w-xl">Your favorites and watchlist, all in one place.</p>
+  </header>
+
+  <!-- Signed-out state (shown/hidden via JS) -->
+  <section id="signedOutState" class="hidden py-24 border border-outline-variant/10 rounded-xl bg-surface-container-lowest/30">
+    <div class="flex flex-col items-center text-center">
+      <div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-6">
+        <span class="material-symbols-outlined text-primary text-[32px]">person</span>
+      </div>
+      <h2 class="font-headline text-3xl text-on-surface mb-3 uppercase tracking-wide">No user selected</h2>
+      <p class="text-base text-on-surface-variant max-w-md">Pick a user from the navbar above to see their favorites and watchlist.</p>
+    </div>
+  </section>
+
+  <!-- Main content (shown/hidden via JS depending on sign-in state) -->
+  <div id="listContent" class="hidden">
+
+    <!-- Favorites Section -->
+    <section class="mb-20">
+      <div class="flex items-center mb-8">
+        <span class="section-line"></span>
+        <h2 class="text-xs font-bold tracking-[0.2em] text-primary uppercase">Favorites</h2>
+      </div>
+
+      <div id="favoritesGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6"></div>
+
+      <div id="favoritesEmpty" class="hidden flex-col items-center justify-center py-20 border border-outline-variant/10 rounded-xl bg-surface-container-lowest/30">
+        <span class="material-symbols-outlined text-outline-variant text-[48px] mb-4">favorite</span>
+        <h3 class="font-headline text-2xl text-on-surface mb-2 uppercase tracking-wide">No favorites yet</h3>
+        <p class="text-sm text-on-surface-variant mb-8">Movies you favorite will show up here.</p>
+        <button onclick="location.href='explore.html'" class="px-8 py-3 rounded-full border border-primary text-primary text-xs font-bold uppercase tracking-widest hover:bg-primary hover:text-surface transition-all active:scale-95">
+          Browse Movies
+        </button>
+      </div>
+    </section>
+
+    <!-- Watchlist Section -->
+    <section class="mb-20">
+      <div class="flex items-center mb-8">
+        <span class="section-line"></span>
+        <h2 class="text-xs font-bold tracking-[0.2em] text-primary uppercase">Watchlist</h2>
+      </div>
+
+      <div id="watchlistGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6"></div>
+
+      <div id="watchlistEmpty" class="hidden flex-col items-center justify-center py-20 border border-outline-variant/10 rounded-xl bg-surface-container-lowest/30">
+        <span class="material-symbols-outlined text-outline-variant text-[48px] mb-4">bookmark_add</span>
+        <h3 class="font-headline text-2xl text-on-surface mb-2 uppercase tracking-wide">No movies in your watchlist yet</h3>
+        <p class="text-sm text-on-surface-variant mb-8">Save movies you want to watch later and they'll appear here.</p>
+        <button onclick="location.href='explore.html'" class="px-8 py-3 rounded-full border border-primary text-primary text-xs font-bold uppercase tracking-widest hover:bg-primary hover:text-surface transition-all active:scale-95">
+          Browse Movies
+        </button>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer class="w-full py-12 px-16 border-t border-outline-variant/10 bg-surface-container-lowest/50">
+  <div class="max-w-[1440px] mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+    <div class="flex flex-col items-center md:items-start">
+      <span class="font-headline text-2xl text-primary tracking-widest mb-2">PLOTPOINT</span>
+      <p class="text-[10px] text-on-surface-variant">© 2024 PlotPoint Cinematics. All rights reserved.</p>
+    </div>
+    <nav class="flex gap-8">
+      <a class="text-[11px] text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy</a>
+      <a class="text-[11px] text-on-surface-variant hover:text-primary transition-colors" href="#">Terms</a>
+      <a class="text-[11px] text-on-surface-variant hover:text-primary transition-colors" href="#">Help</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="components/navbar.js"></script>
+<script>
+
+    // Builds one card, with a remove (X) button in the corner.
+    // `onRemove` is called when that button is clicked.
+    function buildCard(movie, onRemove) {
+        const card = document.createElement('div');
+        card.className = 'group cursor-pointer relative';
+
+        card.innerHTML = `
+            <div class="relative aspect-[2/3] w-full rounded-lg border border-primary/20 overflow-hidden movie-card-hover mb-3">
+                <img class="w-full h-full object-cover" src="${movie.poster_url}" onerror="this.style.display='none'"/>
+
+                <div class="absolute top-2 right-2 z-20 flex items-center gap-1 px-2 py-1 bg-black/50 backdrop-blur-md rounded-full border border-white/10">
+                    <span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+                    <span class="text-[10px] font-bold text-on-surface">${movie.rating}</span>
+                </div>
+
+                <button class="remove-btn absolute top-2 left-2 z-20 w-7 h-7 flex items-center justify-center rounded-full bg-black/50 backdrop-blur-md border border-white/10 text-on-surface-variant hover:text-white">
+                    <span class="material-symbols-outlined text-[16px]">close</span>
+                </button>
+            </div>
+            <p class="text-[11px] text-on-surface-variant truncate uppercase font-semibold tracking-wide group-hover:text-primary transition-colors">${movie.title}</p>
+        `;
+
+        // clicking the poster goes to detail page
+        card.querySelector('img').parentElement.addEventListener('click', (e) => {
+            if (e.target.closest('.remove-btn')) return; // don't navigate if the click was the remove button
+            window.location.href = `detail.html?id=${movie.movie_id}`;
+        });
+
+        // clicking the X removes it, without navigating
+        card.querySelector('.remove-btn').addEventListener('click', async (e) => {
+            e.stopPropagation();
+            await onRemove(movie.movie_id);
+            card.remove(); // pull it out of the DOM immediately
+        });
+
+        return card;
+    }
+
+    function renderList(movies, gridId, emptyId, onRemove) {
+        const grid = document.getElementById(gridId);
+        const empty = document.getElementById(emptyId);
+        grid.innerHTML = '';
+
+        if (!movies || movies.length === 0) {
+            grid.classList.add('hidden');
+            empty.classList.remove('hidden');
+            empty.classList.add('flex');
+            return;
+        }
+
+        grid.classList.remove('hidden');
+        empty.classList.add('hidden');
+        empty.classList.remove('flex');
+
+        movies.forEach(movie => {
+            grid.appendChild(buildCard(movie, onRemove));
+        });
+    }
+
+    async function removeFavorite(userId, movieId) {
+        // Reuses your existing toggle endpoint — since it's already favorited,
+        // calling toggle again flips it off.
+        await fetch('http://localhost:3000/api/favorites/toggle', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ user_id: userId, movie_id: movieId })
+        });
+    }
+
+    async function removeFromWatchlist(userId, movieId) {
+        await fetch(`http://localhost:3000/api/watchlist/${userId}/${movieId}`, {
+            method: 'DELETE'
+        });
+    }
+
+    async function loadMyList() {
+        const userId = localStorage.getItem('user_id');
+        const signedOutState = document.getElementById('signedOutState');
+        const listContent = document.getElementById('listContent');
+
+        if (!userId) {
+            signedOutState.classList.remove('hidden');
+            listContent.classList.add('hidden');
+            return;
+        }
+
+        signedOutState.classList.add('hidden');
+        listContent.classList.remove('hidden');
+
+        try {
+            const favRes = await fetch(`http://localhost:3000/api/favorites/${userId}`);
+            const favorites = await favRes.json();
+            renderList(favorites, 'favoritesGrid', 'favoritesEmpty', (movieId) => removeFavorite(userId, movieId));
+        } catch (err) {
+            console.error('Error loading favorites:', err);
+        }
+
+        try {
+            const watchRes = await fetch(`http://localhost:3000/api/watchlist/${userId}`);
+            const watchlist = await watchRes.json();
+            renderList(watchlist, 'watchlistGrid', 'watchlistEmpty', (movieId) => removeFromWatchlist(userId, movieId));
+        } catch (err) {
+            console.error('Error loading watchlist:', err);
+        }
+    }
+
+    window.addEventListener('load', async () => {
+        await loadNavbar();
+        await loadMyList();
+    });
+</script>
+</body></html>

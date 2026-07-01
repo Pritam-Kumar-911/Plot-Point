@@ -1,0 +1,21 @@
+<nav>
+  <div class="logo">Plot<span style="color:var(--accent)">Point</span><span class="logo-dot"></span></div>
+  <ul class="nav-links">
+    <li data-page="index.html" onclick="location.href='index.html'">Discover</li>
+    <li data-page="explore.html" onclick="location.href='explore.html'">Explore</li>
+    <li data-page="mylist.html" onclick="location.href='mylist.html'">My List</li>
+    <li data-page="dashboard.html" onclick="location.href='dashboard.html'">Dashboard</li>
+  </ul>
+  <select id="userSelect" class="user-select" onchange="switchUser(this.value)" style="
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    outline: none;
+  ">
+</select>
+</nav>

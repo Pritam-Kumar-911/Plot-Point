@@ -9,6 +9,20 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+//__Explore Page__________
+
+app.get('/api/explore/:genre' , async(req , res) => {
+    try{
+        const response = await pool.query(`
+        select poster_url , m.movie_id , title , rating from movies m inner join movie_genres mg on m.movie_id = mg.movie_id inner join genres g on g.genre_id = mg.genre_id where g.name = $1 limit 15;
+        ` , [req.params.genre])
+        res.json(response.rows);
+    }
+    catch(err){
+        res.status(500).json({message: "Error fetching movies"});
+    }
+})
+
 // ── MOVIES ──────────────────────────────────────────
 app.get('/api/movies', async (req, res) => {
     try {

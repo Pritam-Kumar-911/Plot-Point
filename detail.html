@@ -5,6 +5,7 @@
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="components/navbar.css">
 <script id="tailwind-config">
         tailwind.config = {
           darkMode: "class",
@@ -119,13 +120,13 @@
             transform: translateY(-4px);
             box-shadow: 0 10px 30px -10px rgba(200, 169, 110, 0.3);
         }
-        .logo { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 3px; display: flex; align-items: center; gap: 8px; }
+        /* .logo { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 3px; display: flex; align-items: center; gap: 8px; }
         .logo-dot { width: 6px; height: 6px; background: #c8a96e; border-radius: 50%; animation: pulse 2s ease-in-out infinite; }
         @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
         
         .nav-link-item { font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.5px; color: #6b6878; transition: color 0.2s; cursor: pointer; }
         .nav-link-item:hover { color: #f0ece4; }
-        .nav-link-item.active { color: #c8a96e; }
+        .nav-link-item.active { color: #c8a96e; } */
 
         .glass-panel {
             background: rgba(255, 255, 255, 0.03);
@@ -148,7 +149,7 @@
     </style>
 </head>
 <body class="font-body-md text-body-md selection:bg-primary selection:text-on-primary">
-<nav class="fixed top-0 left-0 right-0 z-50 bg-[rgba(10,10,15,0.8)] backdrop-blur-xl border-b border-white/[0.05]">
+<!-- <nav class="fixed top-0 left-0 right-0 z-50 bg-[rgba(10,10,15,0.8)] backdrop-blur-xl border-b border-white/[0.05]">
 <div class="max-w-[1100px] mx-auto flex items-center justify-between px-6 py-4">
 <div class="logo text-on-surface uppercase">Plot<span class="text-primary">Point</span><span class="logo-dot"></span></div>
 <ul class="hidden md:flex gap-8 list-none">
@@ -161,7 +162,8 @@
 <button class="text-on-surface px-5 py-1.5 rounded-full border border-white/[0.1] font-label-sm hover:bg-white/[0.05] transition-all uppercase tracking-widest text-[10px]">Sign In</button>
 </div>
 </div>
-</nav>
+</nav> -->
+<div id="navbar"></div>
 <main class="pt-0">
 <!-- Content Container -->
 <div class="max-w-[1100px] mx-auto px-6">
@@ -414,6 +416,7 @@
 </div>
 </div>
 </footer>
+<script src="components/navbar.js"></script>
 <script>
         // Simple star rating interaction
 
@@ -590,9 +593,10 @@
         // }
 
         //POST and PUT reviews
-        const savedId = localStorage.getItem('user_id');
+        // const savedId = localStorage.getItem('user_id');
         document.querySelector(".text-button").addEventListener("click" , async()=>{
                 const textarea = document.querySelector(".text-box").value;
+                const savedId = localStorage.getItem('user_id');
                 console.log(textarea);
 
                 const result = await fetch(`http://localhost:3000/api/reviews/${movies_id}`);
@@ -633,6 +637,7 @@
 
         async function getReviews() {
             try{
+                const savedId = localStorage.getItem('user_id');
                 const Reviews = await fetch(`http://localhost:3000/api/reviews/${movies_id}`);
                 const results = await Reviews.json();
                 console.log("Check reviews");
@@ -725,6 +730,7 @@
 
         document.querySelector(".submit-btn").addEventListener("click" , async() => {
             console.log("Selected Rating Inside callback: " , selectedRating);
+            const savedId = localStorage.getItem('user_id');
             if(!savedId){
                 alert("Please sign in first");
                 return;
@@ -744,6 +750,7 @@
                     rating_value: selectedRating
                 })
             });
+
             alert("Rating added successfully!");
             getRatings();
             loadRatingComparison();
@@ -770,6 +777,7 @@
 
         //adding to favourites 
         document.querySelector(".favourite-btn").addEventListener("click" , async()=>{
+            const savedId = localStorage.getItem('user_id');
             const postFavourite = await fetch("http://localhost:3000/api/favorites/toggle" , {
                 method: "POST",
                 headers: {
@@ -792,7 +800,9 @@
         //adding to watchlist
         document.querySelector(".watchlist-btn").addEventListener("click" , async()=>{
             try{
+                const savedId = localStorage.getItem('user_id');
                 const postWatlist = await fetch("http://localhost:3000/api/watchlist" , {
+                    
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -825,15 +835,21 @@
         }
 
         
-        loadMovies();
-        // postReview();
-        getReviews();
-        getRatings();
-        loadRatingComparison();
+        // loadMovies();
+        // getReviews();
+        // getRatings();
+        // loadRatingComparison();
 
+        window.addEventListener("load", async () => {
+            await loadNavbar();
+
+            await loadMovies();
+            getReviews();
+            getRatings();
+            loadRatingComparison();
+        });
         
 
     </script>
-
 
 </body></html>

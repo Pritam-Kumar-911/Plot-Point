@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PlotPoint | Explore</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&amp;family=Bebas+Neue&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="components/navbar.css">
+<style>
+        body {
+            background-color: #0a0a0f;
+            color: #e9e1da;
+            overflow-x: hidden;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .glow-overlay {
+            background: radial-gradient(circle at 50% 0%, rgba(107, 104, 120, 0.1) 0%, rgba(200, 169, 110, 0.05) 50%, transparent 100%);
+        }
+
+        .movie-card:hover .poster-container {
+            transform: scale(1.05);
+            box-shadow: 0px 0px 20px rgba(200, 169, 110, 0.2);
+        }
+        
+        .movie-card .poster-container {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .genre-line {
+            width: 20px;
+            height: 1px;
+            background-color: #c8a96e;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#c8a96e",
+                        "on-surface": "#e9e1da",
+                        "on-surface-variant": "#6b6878",
+                        "surface-container-lowest": "#0a0a0f",
+                        "outline-variant": "rgba(255, 255, 255, 0.1)"
+                    },
+                    "spacing": {
+                        "margin-mobile": "16px",
+                        "container-max": "1440px",
+                        "gutter": "16px",
+                        "margin-desktop": "64px"
+                    },
+                    "fontFamily": {
+                        "display": ["Bebas Neue"],
+                        "body": ["DM Sans"]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<div id="navbar"></div>
+<body class="bg-surface-container-lowest selection:bg-primary selection:text-surface-container-lowest">
+<!-- Background Atmospheric Glow -->
+<div class="fixed inset-0 pointer-events-none glow-overlay z-0"></div>
+<main class="relative z-10 max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-12">
+<!-- Compact Header Section -->
+<header class="mb-12">
+<h1 class="font-display text-5xl md:text-6xl text-on-surface mb-1 uppercase tracking-tight">Explore</h1>
+<p class="font-body text-sm text-on-surface-variant uppercase tracking-widest">Browse by genre and mood</p>
+</header>
+<!-- Genre Sections Container -->
+<div class="space-y-10" id="genreContainer"></div>    
+
+</main>
+<footer class="w-full py-10 px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-6 border-t border-white/5 bg-surface-container-lowest mt-16">
+<div class="font-display text-4xl text-primary">PlotPoint</div>
+<div class="flex flex-wrap justify-center gap-8">
+<a class="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors" href="#">API Access</a>
+<a class="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors" href="#">Contact</a>
+</div>
+<p class="text-[11px] font-medium text-on-surface-variant opacity-40">© 2024 PLOTPOINT CINEMATIC AI. ALL RIGHTS RESERVED.</p>
+</footer>
+
+<script src="components/navbar.js"></script>
+<script>
+    // Micro-interactions for horizontal scroll with mouse wheel
+    const sections = document.querySelectorAll('.overflow-x-auto');
+    sections.forEach(section => {
+        section.addEventListener('wheel', (evt) => {
+            if (evt.deltaY != 0) {
+                evt.preventDefault();
+                section.scrollLeft += evt.deltaY;
+            }
+        });
+    });
+
+
+    // const genres = [
+    //     'Drama', 'Animation', 'Romance', 'Fantasy', 'Adventure',
+    //     'Action', 'Comedy', 'Crime', 'Thriller', 'Family',
+    //     'Science Fiction', 'War', 'Mystery', 'History', 'Music'
+    // ];
+
+    // async function fetchMovieCards() {
+    //     for(const element of genres){
+    //        const result = await fetch(`http://localhost:3000/api/explore/${element}`);
+    //        const response = await result.json();
+    //        console.log(response);
+
+    //        response.forEach(ele => {
+    //         const getSection = document.querySelector(".section");
+
+    //         const renderMovieCards = document.createElement('section');
+    //         renderMovieCards.innerHTML = `<div class="flex items-center mb-5">
+    //         <span class="genre-line"></span>
+    //         <h2 class="font-display text-lg tracking-widest text-primary uppercase">Action</h2>
+    //         </div>
+    //         <div class="flex gap-gutter overflow-x-auto no-scrollbar pb-4 -mx-margin-mobile px-margin-mobile md:mx-0 md:px-0">
+    //         `
+    //         getSection.appendChild(renderMovieCards);
+    //        })
+    //     }
+    // }
+    // fetchMovieCards();
+    const genres = [
+    'Drama', 'Animation', 'Romance', 'Fantasy', 'Adventure',
+    'Action', 'Comedy', 'Crime', 'Thriller', 'Family',
+    'Science Fiction', 'War', 'Mystery', 'History', 'Music'
+    ];
+
+function createGenreSection(genreName) {
+    const rowId = `row-${genreName.replace(/\s+/g, '-').toLowerCase()}`;
+
+    const section = document.createElement('section');
+    section.className = 'genre-section';
+    section.innerHTML = `
+        <div class="flex items-center mb-5">
+            <span class="genre-line"></span>
+            <h2 class="font-display text-lg tracking-widest text-primary uppercase">${genreName}</h2>
+        </div>
+        <div class="flex gap-gutter overflow-x-auto no-scrollbar pb-4 -mx-margin-mobile px-margin-mobile md:mx-0 md:px-0" id="${rowId}"></div>
+    `;
+
+    document.getElementById('genreContainer').appendChild(section);
+    return rowId;
+}
+
+function renderMovieCards(movies, rowId) {
+    const row = document.getElementById(rowId);
+
+    movies.forEach(movie => {
+        const card = document.createElement('div');
+        card.className = 'movie-card flex-none w-[160px] md:w-[180px] group cursor-pointer';
+        card.innerHTML = `
+            <div class="poster-container relative aspect-[2/3] rounded-[10px] overflow-hidden border border-outline-variant bg-surface-container-high mb-2">
+                <img src="${movie.poster_url}" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none'"/>
+                <div class="absolute top-2 right-2 flex items-center gap-0.5 bg-black/40 backdrop-blur-sm px-1.5 py-0.5 rounded-full border border-white/10">
+                    <span class="material-symbols-outlined text-[10px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+                    <span class="text-[10px] font-bold text-on-surface">${movie.rating}</span>
+                </div>
+            </div>
+            <h3 class="text-xs font-medium text-on-surface truncate px-0.5">${movie.title}</h3>
+        `;
+        card.onclick = () => window.location.href = `detail.html?id=${movie.movie_id}`;
+        row.appendChild(card);
+    });
+}
+
+async function fetchMovieCards() {
+    for (const genre of genres) {
+        const result = await fetch(`http://localhost:3000/api/explore/${genre}`);
+        const movies = await result.json();
+
+        if (movies.length === 0) continue;
+
+        const rowId = createGenreSection(genre);
+        renderMovieCards(movies, rowId);
+    }
+}
+
+    
+    window.addEventListener('load', async() => {
+    await loadNavbar();
+    // await loadMovies();
+    await fetchMovieCards();
+    });
+</script>
+</body></html>
