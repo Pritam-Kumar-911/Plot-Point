@@ -404,12 +404,12 @@ app.get('/api/movies/:id' , async(req , res) => {
 
 // ── SEARCH LOGS ──────────────────────────────────────
 app.post('/api/search-log', async (req, res) => {
-    const { user_id, query_text, results_returned } = req.body;
+    const { user_id, query_text, results_returned ,match_percentage, top_movie } = req.body;
     try {
         await pool.query(`
-            INSERT INTO search_logs (user_id, query_text, results_returned)
-            VALUES ($1, $2, $3)
-        `, [user_id || null, query_text, results_returned]);
+            INSERT INTO search_logs (user_id, query_text, results_returned , match_percentage, top_movie)
+            VALUES ($1, $2, $3 , $4 , $5)
+        `, [user_id || null, query_text, results_returned , match_percentage , top_movie]);
         res.json({ message: "Logged" });
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -451,6 +451,127 @@ app.get('/api/dashboard', async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 });
+
+//dashboard
+
+
+//sementic search box 
+app.get('/api/dashboard/sementic-insights' , async(req , res)=> {
+    try{
+        const getRows = await pool.query(`
+            select query_text , title , match_percentage , searched_at from search_logs sl inner join movies m on m.movie_id = sl.top_movie;
+            `)
+        res.json(getRows.rows);    
+    }
+    catch(error){
+        res.status(500).json({message: "Error fetching data"});
+    }
+})
+
+//main header details "
+app.get('/api/dashboard/header' , async(req , res)=>{
+    try{
+        const getHeader = await pool.query(`
+            select * from getData;
+            `)
+        res.json(getHeader.rows);    
+    }catch(error){
+        res.stats(500).json({message: "Error fetching data"});
+    }
+})
+
+//top 5 movies
+app.get('/api/dashboard/topmovies' , async(req , res)=>{
+    try{
+        const getHeader = await pool.query(`
+            SELECT
+                m.title,
+                STRING_AGG(DISTINCT g.name, ', ') AS genres,
+                ROUND(AVG(r.rating_value), 2) AS avg_rating,
+                m.poster_url
+            FROM movies m
+            JOIN movie_genres mg ON m.movie_id = mg.movie_id
+            JOIN genres g ON g.genre_id = mg.genre_id
+            JOIN ratings r ON r.movie_id = m.movie_id
+            GROUP BY m.movie_id, m.title
+            ORDER BY avg_rating DESC
+            LIMIT 5;
+            `)
+        res.json(getHeader.rows);    
+    }catch(error){
+        res.stats(500).json({message: "Error fetching data"});
+    }
+})
+
+//most active users
+app.get('/api/dashboard/activeusers' , async(req , res)=>{
+    try{
+        const getHeader = await pool.query(`
+            SELECT
+                u.username,
+                COUNT(DISTINCT r.review_id) AS total_reviews,
+                ROUND(AVG(rt.rating_value), 2) AS avg_rating_given
+            FROM users u
+            LEFT JOIN reviews r
+                ON u.user_id = r.user_id
+            LEFT JOIN ratings rt
+                ON u.user_id = rt.user_id
+            GROUP BY u.user_id, u.username
+            ORDER BY total_reviews DESC;
+            `)
+        res.json(getHeader.rows);    
+    }catch(error){
+        res.stats(500).json({message: "Error fetching data"});
+    }
+})
+
+//most favorited movies 
+app.get('/api/dashboard/mostfavorited' , async(req , res)=>{
+    try{
+        const getHeader = await pool.query(`
+            select title , count(fav_id) from movies m inner join user_favorites uf on m.movie_id = uf.movie_id group by title order by count(fav_id) desc limit 4;
+            `)
+        res.json(getHeader.rows);    
+    }catch(error){
+        res.stats(500).json({message: "Error fetching data"});
+    }
+})
+
+//rating distribution 
+app.get('/api/dashboard/ratingdist' , async(req , res)=>{
+    try{
+        const getRatings = await pool.query(`
+            select rating_value , count(movie_id) from ratings group by rating_value order by rating_value desc;
+            `)
+        res.json(getRatings.rows);    
+    }catch(error){
+        res.stats(500).json({message: "Error fetching data"});
+    }
+})
+
+//movies per genre
+app.get('/api/dashboard/moviesPerGenre' , async(req , res)=>{
+    try{
+        const getMovies = await pool.query(`
+            select name , count(m.movie_id) from movies m inner join movie_genres mg on m.movie_id = mg.movie_id inner join genres on mg.genre_id = genres.genre_id group by name limit 4;
+            `)
+        res.json(getMovies.rows);    
+    }catch(error){
+        res.stats(500).json({message: "Error fetching data"});
+    }
+})
+
+//avg ratings per genre
+app.get('/api/dashboard/avgrating' , async(req , res)=>{
+    try{
+        const getAvg = await pool.query(`
+            select name , ROUND(AVG(r.rating_value), 2) from ratings r inner join movie_genres mg on r.movie_id = mg.movie_id inner join genres g on g.genre_id = mg.genre_id group by name order by ROUND(AVG(r.rating_value), 2) desc limit 5;
+            `)
+        res.json(getAvg.rows);    
+    }catch(error){
+        res.stats(500).json({message: "Error fetching data"});
+    }
+})
 
 // ── START SERVER ─────────────────────────────────────
 app.listen(process.env.PORT, () => {

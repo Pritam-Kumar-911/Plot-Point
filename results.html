@@ -660,7 +660,7 @@
       <div style="position:absolute;inset:0;background:linear-gradient(to right,transparent 60%,var(--surface))"></div>
       <div class="featured-match">
         <div class="match-circle">
-          <div class="match-pct">${movie.match_percentage}</div>
+          <div class="match-pct">${displayScore(movie.match_percentage)}</div>
           <div class="match-lbl">match</div>
         </div>
       </div>
@@ -685,6 +685,14 @@
     };
   }
 
+  function displayScore(score) {
+    score = Number(score);
+
+    if (score < 50) return Math.round(score);
+
+    return Math.min(99, Math.round(70 + (score - 50) * 1.45));
+}
+
   // ── RENDER GRID ──────────────────────────────────
   function renderGrid(movies) {
     const grid = document.getElementById('resultsGrid');
@@ -699,7 +707,7 @@
           <img src="${m.poster_url}"
                style="width:100%;height:100%;object-fit:cover;border-radius:10px"
                onerror="this.style.display='none'"/>
-          <div class="match-badge">${m.match_percentage}%</div>
+          <div class="match-badge">${displayScore(m.match_percentage)}%</div>
           <div class="card-overlay"><div class="play-btn">▶</div></div>
         </div>
         <div class="card-title">${m.title}</div>
@@ -811,6 +819,7 @@ function matchesRating(movie) {
     return true;
 }
 
+
   // ── LOAD RESULTS ─────────────────────────────────
   async function loadResults() {
     if (!query) return;
@@ -888,6 +897,9 @@ document.querySelectorAll('.genre-item input').forEach(function(cb) {
       aiText.textContent = 'No explanation available.';
     }
 
+
+    console.log(data.result[0].match_percentage);
+
     // log search
     const userId = localStorage.getItem('user_id');
     fetch('http://localhost:3000/api/search-log', {
@@ -896,7 +908,9 @@ document.querySelectorAll('.genre-item input').forEach(function(cb) {
       body: JSON.stringify({
         user_id: userId || null,
         query_text: query,
-        results_returned: data.result.length
+        results_returned: data.result.length,
+        match_percentage: displayScore(data.result[0].match_percentage),
+        top_movie: data.result[0].movie_id
       })
     });
   }

@@ -8,6 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,700;1,400&amp;family=Bebas+Neue&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="components/navbar.css">
 <script id="tailwind-config">
       tailwind.config = {
         darkMode: "class",
@@ -155,6 +156,7 @@
         }
     </style>
 </head>
+<div id="navbar"></div>
 <body class="font-body-md selection:bg-primary/30 selection:text-primary">
 <main class="max-w-7xl mx-auto px-6 py-12">
 <!-- Header Section -->
@@ -163,9 +165,10 @@
 <p class="text-on-surface-variant font-body-lg mb-4">Analytics and insights from the PlotPoint database.</p>
 <div class="flex gap-2">
 <span class="px-3 py-1 rounded-full border border-outline-variant/30 text-label-caps font-label-caps bg-surface-container-low text-on-surface-variant/70">PostgreSQL</span>
-<span class="px-3 py-1 rounded-full border border-outline-variant/30 text-label-caps font-label-caps bg-surface-container-low text-on-surface-variant/70">pgvector</span>
+<span class="px-3 py-1 rounded-full border border-outline-variant/30 text-label-caps font-label-caps bg-surface-container-low text-on-surface-variant/70">pgvector extention</span>
 <span class="px-3 py-1 rounded-full border border-outline-variant/30 text-label-caps font-label-caps bg-surface-container-low text-on-surface-variant/70">Node.js</span>
 <span class="px-3 py-1 rounded-full border border-outline-variant/30 text-label-caps font-label-caps bg-surface-container-low text-on-surface-variant/70">Express</span>
+<span class="px-3 py-1 rounded-full border border-outline-variant/30 text-label-caps font-label-caps bg-surface-container-low text-on-surface-variant/70">3072-dimensional vector embeddings</span>
 </div>
 </header>
 <!-- Overview Section -->
@@ -176,8 +179,8 @@
 <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">files</span>
 </div>
 <div>
-<p class="text-label-caps font-label-caps text-on-surface-variant">Total Movies</p>
-<p class="text-headline-md font-headline-md text-on-surface">1,248</p>
+<p class=" text-label-caps font-label-caps text-on-surface-variant">Total Movies</p>
+<p class="total-movies text-headline-md font-headline-md text-on-surface">1,248</p>
 </div>
 </div>
 <!-- Card 2 -->
@@ -186,8 +189,8 @@
 <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">category</span>
 </div>
 <div>
-<p class="text-label-caps font-label-caps text-on-surface-variant">Total Genres</p>
-<p class="text-headline-md font-headline-md text-on-surface">18</p>
+<p class=" text-label-caps font-label-caps text-on-surface-variant">Total Genres</p>
+<p class="total-genres text-headline-md font-headline-md text-on-surface">18</p>
 </div>
 </div>
 <!-- Card 3 -->
@@ -196,8 +199,8 @@
 <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">people</span>
 </div>
 <div>
-<p class="text-label-caps font-label-caps text-on-surface-variant">Total Users</p>
-<p class="text-headline-md font-headline-md text-on-surface">4,215</p>
+<p class=" text-label-caps font-label-caps text-on-surface-variant">Total Cast</p>
+<p class="total-cast text-headline-md font-headline-md text-on-surface">4,215</p>
 </div>
 </div>
 <!-- Card 4 -->
@@ -206,8 +209,8 @@
 <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
 </div>
 <div>
-<p class="text-label-caps font-label-caps text-on-surface-variant">Total Reviews</p>
-<p class="text-headline-md font-headline-md text-on-surface">8,942</p>
+<p class=" text-label-caps font-label-caps text-on-surface-variant">Total Searches</p>
+<p class="total-searches text-headline-md font-headline-md text-on-surface">8,942</p>
 </div>
 </div>
 </section>
@@ -225,11 +228,11 @@
 </div>
 <div class="flex items-center gap-3 bg-surface-container px-4 py-2 rounded-lg border border-outline-variant/20">
 <span class="material-symbols-outlined text-primary text-[20px]">database</span>
-<span class="text-on-surface font-body-md">1,248 movies with vector embeddings generated</span>
+<span class="embd text-on-surface font-body-md">1,248 movies with vector embeddings generated</span>
 </div>
 </div>
-<div class="space-y-4">
-<!-- Row 1 -->
+<div class="sementic-box space-y-4">
+<!-- Row 1
 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center bg-background/40 p-4 rounded-lg border border-outline-variant/10 hover:border-primary/20 transition-all">
 <div class="flex items-center gap-3">
 <span class="material-symbols-outlined text-on-surface-variant text-[18px]">search</span>
@@ -237,13 +240,13 @@
 </div>
 <div class="flex items-center gap-2">
 <span class="material-symbols-outlined text-primary text-[18px]">trending_flat</span>
-<span class="font-body-md text-on-surface">Neon Rain</span>
+<span class="font-body-md text-on-surface">Neon </span>
 </div>
 <div class="flex justify-end">
 <span class="px-2 py-0.5 rounded text-label-caps font-label-caps bg-primary/10 text-primary border border-primary/20">0.94 match</span>
 </div>
 </div>
-<!-- Row 2 -->
+Row 2
 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center bg-background/40 p-4 rounded-lg border border-outline-variant/10 hover:border-primary/20 transition-all">
 <div class="flex items-center gap-3">
 <span class="material-symbols-outlined text-on-surface-variant text-[18px]">search</span>
@@ -257,8 +260,8 @@
 <span class="px-2 py-0.5 rounded text-label-caps font-label-caps bg-primary/10 text-primary border border-primary/20">0.91 match</span>
 </div>
 </div>
-<!-- Row 3 -->
-<div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center bg-background/40 p-4 rounded-lg border border-outline-variant/10 hover:border-primary/20 transition-all">
+Row 3 -->
+<!-- <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center bg-background/40 p-4 rounded-lg border border-outline-variant/10 hover:border-primary/20 transition-all">
 <div class="flex items-center gap-3">
 <span class="material-symbols-outlined text-on-surface-variant text-[18px]">search</span>
 <span class="italic text-on-surface-variant font-body-md">"Gritty noir with high contrast visuals"</span>
@@ -270,7 +273,7 @@
 <div class="flex justify-end">
 <span class="px-2 py-0.5 rounded text-label-caps font-label-caps bg-primary/10 text-primary border border-primary/20">0.88 match</span>
 </div>
-</div>
+</div> -->
 </div>
 </div>
 </section>
@@ -458,8 +461,8 @@
 <th class="pb-3 text-label-caps font-label-caps text-on-surface-variant text-right">Rating</th>
 </tr>
 </thead>
-<tbody class="divide-y divide-outline-variant/5">
-<tr class="hover:bg-primary-container/5 transition-colors">
+<tbody class="container divide-y divide-outline-variant/5">
+<!-- <tr class="hover:bg-primary-container/5 transition-colors">
 <td class="py-4 font-body-sm text-primary">#1</td>
 <td class="py-4">
 <div class="flex items-center gap-3">
@@ -512,7 +515,7 @@
 <span class="font-body-md">4.85</span>
 </div>
 </td>
-</tr>
+</tr> -->
 </tbody>
 </table>
 </div>
@@ -533,8 +536,8 @@
 <th class="pb-3 text-label-caps font-label-caps text-on-surface-variant text-right">Avg Rating</th>
 </tr>
 </thead>
-<tbody class="divide-y divide-outline-variant/5">
-<tr class="hover:bg-primary-container/5 transition-colors">
+<tbody class="container-2 divide-outline-variant/5">
+<!-- <tr class="hover:bg-primary-container/5 transition-colors">
 <td class="py-4 font-body-sm text-primary">#1</td>
 <td class="py-4 font-body-md text-on-surface">Cinephile_99</td>
 <td class="py-4 text-center text-body-sm text-on-surface-variant">142</td>
@@ -557,7 +560,7 @@
 <td class="py-4 font-body-md text-on-surface">FrameFinder</td>
 <td class="py-4 text-center text-body-sm text-on-surface-variant">96</td>
 <td class="py-4 text-right text-body-md text-primary">4.1</td>
-</tr>
+</tr> -->
 </tbody>
 </table>
 </div>
@@ -587,6 +590,7 @@
             © 2024 PLOTPOINT CINEMATIC INTELLIGENCE. ALL RIGHTS RESERVED.
         </div>
 </footer>
+<script src="components/navbar.js"></script>
 <script>
         // Micro-interaction: Glow follow for glass panels
         document.querySelectorAll('.glass-panel').forEach(panel => {
@@ -598,5 +602,136 @@
                 panel.style.setProperty('--mouse-y', `${y}px`);
             });
         });
+
+
+        //Semantic Search Insights
+        async function sementicSearchAnalytics(params) {
+            try{
+                const getData = await fetch("http://localhost:3000/api/dashboard/sementic-insights");
+                const data = await getData.json();
+                console.log(data);
+                data.forEach(element => {
+                    const container = document.querySelector(".sementic-box");
+                    const change = document.createElement('div');
+                    change.classList = "grid grid-cols-1 md:grid-cols-3 gap-4 items-center bg-background/40 p-4 rounded-lg border border-outline-variant/10 hover:border-primary/20 transition-all";
+                    change.innerHTML = `<div class="flex items-center gap-3">
+                        <span class="material-symbols-outlined text-on-surface-variant text-[18px]">search</span>
+                        <span class="italic text-on-surface-variant font-body-md">"${element.query_text}"</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary text-[18px]">trending_flat</span>
+                        <span class="font-body-md text-on-surface">${element.title}</span>
+                        </div>
+                        
+                        <div class="flex justify-end">
+                        <span class="px-2 py-0.5 rounded text-label-caps font-label-caps bg-primary/10 text-primary border border-primary/20">${Math.round(element.match_percentage)}% match</span>
+                        </div>`
+                    container.appendChild(change);
+                })
+            }
+            catch(error){
+                console.log(error);
+            }
+        }
+
+        //Header Info
+        async function HeaderInfo() {
+            try{
+                const data = await fetch("http://localhost:3000/api/dashboard/header");
+                const resultsData = await data.json();
+                console.log(resultsData[0].totalmovies);
+                console.log(resultsData[0].totalcast);
+                console.log(resultsData[0].totalsearches);
+                console.log(resultsData[0].totalgenres);
+
+                document.querySelector(".total-movies").innerHTML = resultsData[0].totalmovies;
+                document.querySelector(".total-cast").innerHTML = resultsData[0].totalcast;
+                document.querySelector(".total-searches").innerHTML = resultsData[0].totalsearches;
+                document.querySelector(".total-genres").innerHTML = resultsData[0].totalgenres;
+                document.querySelector(".embd").innerHTML = `${resultsData[0].totalmovies} movies with vector embeddings generated`;
+
+
+            }
+            catch(error){
+                console.log(error);
+            }
+        }
+        //top 5 rated movies
+
+        async function topMovies() {
+            try{
+                const getTopMovies = await fetch("http://localhost:3000/api/dashboard/topmovies");
+                const getResults = await getTopMovies.json();
+                getResults.forEach(element => {
+                    console.log(element);
+
+                });
+                for (let index = 0; index < getResults.length; index++) {
+
+                    console.log(index+1 , " " , getResults[index].title)
+                    const cont = document.querySelector(".container") ;
+                    const innerDiv = document.createElement('tr');
+                    innerDiv.classList = "hover:bg-primary-container/5 transition-colors";
+                    innerDiv.innerHTML = 
+                    `
+                    <td class="py-4 font-body-sm text-primary">#${index+1}</td>
+                    <td class="py-4">
+                    <div class="flex items-center gap-3">
+                    <div class="w-8 h-12 bg-surface-container rounded-sm overflow-hidden flex-shrink-0">
+                    <img class="w-full h-full object-cover" data-alt="A moody cinematic movie poster for a film titled 'Midnight Echo', featuring high-contrast noir lighting and a mysterious silhouette against a rain-slicked city street. Deep blacks and vibrant gold accents create a prestigious gallery-grade aesthetic. 4k resolution, professional studio lighting." src="${getResults[index].poster_url}"/>
+                    </div>
+                    <span class="font-body-md text-on-surface">${getResults[index].title}</span>
+                    </div>
+                    </td>
+                    <td class="py-4 text-body-sm text-on-surface-variant">${getResults[index].genres}</td>
+                    <td class="py-4 text-right">
+                    <div class="flex items-center justify-end gap-1 text-primary">
+                    <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                    <span class="font-body-md">${getResults[index].avg_rating}</span>
+                    </div>
+                    </td>
+                    </tr>
+                    `
+                    cont.appendChild(innerDiv);
+                }
+                
+            }catch(error){
+                console.log(error);
+            }
+        }
+        //active users
+        async function activeUsers() {
+            try{
+                const getUsers = await fetch("http://localhost:3000/api/dashboard/activeusers");
+                const getData = await getUsers.json();
+                for (let index = 0; index < getData.length; index++) {
+                    const container1 = document.querySelector(".container-2");
+                    const newTr = document.createElement('tr');
+                    newTr.classList = "hover:bg-primary-container/5 transition-colors";
+                    newTr.innerHTML = `
+                    
+                    <td class="py-4 font-body-sm text-primary">#${index+1}</td>
+                    <td class="py-4 font-body-md text-on-surface">${getData[index].username}</td>
+                    <td class="py-4 text-center text-body-sm text-on-surface-variant">${getData[index].total_reviews}</td>
+                    <td class="py-4 text-right text-body-md text-primary">${getData[index].avg_rating_given}</td>
+                    
+                    `
+                    container1.appendChild(newTr);
+                }
+            }
+            catch(error){
+
+            }
+        }
+
+        window.addEventListener("load", async () => {
+            await loadNavbar();
+            sementicSearchAnalytics();
+            HeaderInfo();    
+            topMovies();
+            activeUsers();
+        });
+        
+
     </script>
 </body></html>
