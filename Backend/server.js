@@ -476,7 +476,7 @@ app.get('/api/dashboard/header' , async(req , res)=>{
             `)
         res.json(getHeader.rows);    
     }catch(error){
-        res.stats(500).json({message: "Error fetching data"});
+        res.status(500).json({message: "Error fetching data"});
     }
 })
 
@@ -499,7 +499,7 @@ app.get('/api/dashboard/topmovies' , async(req , res)=>{
             `)
         res.json(getHeader.rows);    
     }catch(error){
-        res.stats(500).json({message: "Error fetching data"});
+        res.status(500).json({message: "Error fetching data"});
     }
 })
 
@@ -521,7 +521,7 @@ app.get('/api/dashboard/activeusers' , async(req , res)=>{
             `)
         res.json(getHeader.rows);    
     }catch(error){
-        res.stats(500).json({message: "Error fetching data"});
+        res.status(500).json({message: "Error fetching data"});
     }
 })
 
@@ -533,7 +533,7 @@ app.get('/api/dashboard/mostfavorited' , async(req , res)=>{
             `)
         res.json(getHeader.rows);    
     }catch(error){
-        res.stats(500).json({message: "Error fetching data"});
+        res.status(500).json({message: "Error fetching data"});
     }
 })
 
@@ -545,7 +545,7 @@ app.get('/api/dashboard/ratingdist' , async(req , res)=>{
             `)
         res.json(getRatings.rows);    
     }catch(error){
-        res.stats(500).json({message: "Error fetching data"});
+        res.status(500).json({message: "Error fetching data"});
     }
 })
 
@@ -557,7 +557,7 @@ app.get('/api/dashboard/moviesPerGenre' , async(req , res)=>{
             `)
         res.json(getMovies.rows);    
     }catch(error){
-        res.stats(500).json({message: "Error fetching data"});
+        res.status(500).json({message: "Error fetching data"});
     }
 })
 
@@ -569,7 +569,7 @@ app.get('/api/dashboard/avgrating' , async(req , res)=>{
             `)
         res.json(getAvg.rows);    
     }catch(error){
-        res.stats(500).json({message: "Error fetching data"});
+        res.status(500).json({message: "Error fetching data"});
     }
 })
 
