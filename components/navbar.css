@@ -1,4 +1,4 @@
-:root {
+/* :root {
     --accent: #c8a96e;
     --text: #e9e1da;
     --muted: #6b6878;
@@ -34,14 +34,147 @@ nav {
     border-radius: 8px;
     cursor: pointer;
     outline: none;
-    transition: all 0.2s;
+    transition: all 0.2s; */
 
     /* Remove native browser arrow */
+    /* appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none; */
+
+    /* Custom gold arrow via inline SVG */
+    /* background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23c8a96e' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+} */
+
+/* .user-select:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(200, 169, 110, 0.4);
+}
+
+.user-select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(200, 169, 110, 0.1);
+}
+
+.user-select option {
+    background: #16130f;
+    color: var(--text);
+} */
+
+
+
+
+:root {
+    --accent: #c8a96e;
+    --text: #e9e1da;
+    --muted: #6b6878;
+    --border: rgba(255, 255, 255, 0.08);
+}
+
+nav {
+    position: sticky; top: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 48px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(10,10,15,0.72);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    animation: fadeDown 0.8s ease both;
+}
+
+.logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    letter-spacing: 4px;
+    display: flex; align-items: center; gap: 8px;
+    color: var(--text);
+}
+
+.logo-dot {
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(200,169,110,0.7);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.nav-links {
+    display: flex;
+    gap: 8px;
+    list-style: none;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    color: var(--muted);
+}
+
+.nav-links li {
+    position: relative;
+    padding: 8px 14px;
+    cursor: pointer;
+    transition: color 0.25s ease;
+}
+
+.nav-links li::after {
+    content: '';
+    position: absolute;
+    left: 14px; right: 14px; bottom: -1px;
+    height: 2px;
+    background: var(--accent);
+    box-shadow: 0 0 6px rgba(200,169,110,0.6);
+    border-radius: 2px;
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.3s ease;
+}
+
+.nav-links li:hover {
+    color: var(--text);
+}
+
+.nav-links li.active {
+    color: var(--accent);
+}
+
+.nav-links li.active::after {
+    transform: scaleX(1);
+}
+
+.btn-signin {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 9px 22px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.05);
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-signin:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+.user-select {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border);
+    padding: 9px 36px 9px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.2s;
+
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
 
-    /* Custom gold arrow via inline SVG */
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23c8a96e' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 14px center;
@@ -60,4 +193,60 @@ nav {
 .user-select option {
     background: #16130f;
     color: var(--text);
+}
+
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+
+
+.nav-reel {
+    position: relative;
+    height: 1px;
+    background: var(--border);
+    overflow: hidden;
+}
+
+.nav-reel::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -140px;
+    width: 140px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent) 50%, transparent);
+    filter: drop-shadow(0 0 5px rgba(200,169,110,0.55));
+    animation: navReelSweep 11s ease-in-out infinite;
+}
+
+.nav-reel-holes {
+    position: absolute;
+    top: 50%; left: 0; right: 0;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: space-between;
+    padding: 0 48px;
+    pointer-events: none;
+}
+
+.nav-reel-holes span {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: #0a0a0f;
+    border: 1px solid var(--border);
+}
+
+@keyframes navReelSweep {
+  0%   { left: -140px; }
+  50%  { left: 100%; }
+  100% { left: -140px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-reel::before { animation: none; left: 40%; }
 }

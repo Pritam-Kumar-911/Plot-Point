@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="components/navbar.css">
+<link rel="stylesheet" href="components/footer.css"> 
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -237,7 +238,6 @@
     </div>
   </div>
 </section>
-
 <!-- Recommended Section -->
 <section class="recommended">
   <div class="rec-header">
@@ -248,7 +248,10 @@
   <div class="cards-container">
     <div class="cards-row" id="cardsRow"></div>
   </div>
+  <div id="footer"></div>
 </section>
+
+
 
 <!-- <script>
   const movies = [
@@ -297,6 +300,7 @@
 </html> -->
 
 <script src="components/navbar.js"></script>
+<script src="components/footer.js"></script>
 <script>
   // ── USERS DROPDOWN ──────────────────────────────
   // async function loadUsers() {
@@ -371,6 +375,7 @@
   // ── ON PAGE LOAD ─────────────────────────────────
   window.addEventListener('load', async() => {
     await loadNavbar();
+    await loadFooter();
     await loadMovies();
   });
   document.getElementById('searchInput').addEventListener('keydown', (e) => {

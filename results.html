@@ -5,6 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="components/footer.css">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -309,7 +310,9 @@
     <div class="results-grid" id="resultsGrid"></div>
 
   </main>
+  
 </div>
+
 
 <!-- <script>
   const movies = [
@@ -613,6 +616,7 @@
   });
 </script> -->
 
+<script src="components/footer.js"></script>
 <script>
   const params = new URLSearchParams(window.location.search);
   const query = params.get('q') || '';
@@ -942,6 +946,7 @@ function clearFilters() {
   window.addEventListener('load', () => {
     loadUsers();
     loadResults();
+    loadFooter();
 
      document.getElementById('yearSlider').addEventListener('input', function() {
         document.getElementById('yearVal').textContent = this.value + ' – 2024';

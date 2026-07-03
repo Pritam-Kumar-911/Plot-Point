@@ -459,7 +459,7 @@ app.get('/api/dashboard', async (req, res) => {
 app.get('/api/dashboard/sementic-insights' , async(req , res)=> {
     try{
         const getRows = await pool.query(`
-            select query_text , title , match_percentage , searched_at from search_logs sl inner join movies m on m.movie_id = sl.top_movie;
+            select query_text , title , match_percentage , searched_at from search_logs sl inner join movies m on m.movie_id = sl.top_movie order by search_id limit 3;
             `)
         res.json(getRows.rows);    
     }

@@ -6,6 +6,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
 <link rel="stylesheet" href="components/navbar.css">
+<link rel="stylesheet" href="components/footer.css">
 <script id="tailwind-config">
         tailwind.config = {
           darkMode: "class",
@@ -402,7 +403,7 @@
 </div>
 </main>
 <!-- Footer -->
-<footer class="w-full mt-8 border-t border-white/5 bg-[#050508] py-12">
+<!-- <footer class="w-full mt-8 border-t border-white/5 bg-[#050508] py-12">
 <div class="max-w-[1100px] mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
 <div class="flex flex-col items-center md:items-start gap-2">
 <span class="logo text-2xl text-white uppercase tracking-[0.2em]">Plot<span class="text-primary">Point</span></span>
@@ -415,8 +416,10 @@
 <a class="text-[10px] font-medium text-on-surface-variant uppercase tracking-widest hover:text-primary transition-colors" href="#">Membership</a>
 </div>
 </div>
-</footer>
+</footer> -->
+<div id="footer"></div>
 <script src="components/navbar.js"></script>
+<script src="components/footer.js"></script>
 <script>
         // Simple star rating interaction
 
@@ -847,6 +850,7 @@
             getReviews();
             getRatings();
             loadRatingComparison();
+            loadFooter();
         });
         
 

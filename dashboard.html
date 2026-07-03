@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="components/navbar.css">
+<link rel="stylesheet" href="components/footer.css">
 <script id="tailwind-config">
       tailwind.config = {
         darkMode: "class",
@@ -587,7 +588,7 @@ Row 3 -->
 </div>
 </section>
 </main>
-<footer class="mt-24 border-t border-outline-variant/10 py-12">
+<!-- <footer class="mt-24 border-t border-outline-variant/10 py-12">
 <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
 <div class="flex flex-col gap-2">
 <span class="font-headline-md text-headline-md text-primary tracking-wider">PlotPoint</span>
@@ -609,8 +610,10 @@ Row 3 -->
 <div class="max-w-7xl mx-auto px-6 mt-12 text-center text-label-caps font-label-caps text-on-surface-variant/40">
             © 2024 PLOTPOINT CINEMATIC INTELLIGENCE. ALL RIGHTS RESERVED.
         </div>
-</footer>
+</footer> -->
+<div id="footer"></div>
 <script src="components/navbar.js"></script>
+<script src="components/footer.js"></script>
 <script>
         // Micro-interaction: Glow follow for glass panels
         document.querySelectorAll('.glass-panel').forEach(panel => {
@@ -914,6 +917,7 @@ Row 3 -->
             mostFavorited();
             avgRatingPerGenre();
             loadReleaseYearChart();
+            loadFooter();
         });
         
 

@@ -8,6 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&amp;family=Bebas+Neue&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="components/navbar.css">
+<link rel="stylesheet" href="components/footer.css">
 <style>
         body {
             background-color: #0a0a0f;
@@ -87,7 +88,7 @@
 <div class="space-y-10" id="genreContainer"></div>    
 
 </main>
-<footer class="w-full py-10 px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-6 border-t border-white/5 bg-surface-container-lowest mt-16">
+<!-- <footer class="w-full py-10 px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-6 border-t border-white/5 bg-surface-container-lowest mt-16">
 <div class="font-display text-4xl text-primary">PlotPoint</div>
 <div class="flex flex-wrap justify-center gap-8">
 <a class="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
@@ -96,9 +97,12 @@
 <a class="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors" href="#">Contact</a>
 </div>
 <p class="text-[11px] font-medium text-on-surface-variant opacity-40">© 2024 PLOTPOINT CINEMATIC AI. ALL RIGHTS RESERVED.</p>
-</footer>
+</footer> -->
+<div id="footer"></div>
 
 <script src="components/navbar.js"></script>
+<script src="components/footer.js"></script>
+
 <script>
     // Micro-interactions for horizontal scroll with mouse wheel
     const sections = document.querySelectorAll('.overflow-x-auto');
@@ -200,6 +204,7 @@ async function fetchMovieCards() {
     await loadNavbar();
     // await loadMovies();
     await fetchMovieCards();
+    await loadFooter();
     });
 </script>
 </body></html>
