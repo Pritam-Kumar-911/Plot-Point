@@ -573,6 +573,25 @@ app.get('/api/dashboard/avgrating' , async(req , res)=>{
     }
 })
 
+//movies by release year 
+app.get('/api/dashboard/releaseyear' , async(req , res)=>{
+    try{
+        const getMovies = await pool.query(`
+            SELECT
+                (FLOOR(release_year / 10) * 10)::int AS decade,
+                COUNT(*) AS movie_count
+            FROM movies
+            WHERE release_year IS NOT NULL
+            GROUP BY decade
+            ORDER BY decade ASC;
+            `)
+        res.json(getMovies.rows);    
+    }catch(error){
+        res.status(500).json({message: "Error fetching data"});
+    }
+})
+
+
 // ── START SERVER ─────────────────────────────────────
 app.listen(process.env.PORT, () => {
     console.log(`Server running on port ${process.env.PORT}`);

@@ -431,14 +431,14 @@ Row 3 -->
 </div> -->
 </div>
 <!-- Movies by Release Year (Full Width) -->
-<div class="glass-panel p-6 rounded-xl lg:col-span-2">
+<!-- <div class="glass-panel p-6 rounded-xl lg:col-span-2">
 <div class="flex items-center gap-2 mb-6">
 <div class="w-4 h-[1px] bg-primary"></div>
 <h3 class="font-label-caps text-label-caps text-primary uppercase">Movies by Release Year</h3>
 </div>
-<div class="relative h-48 w-full">
+<div class="relative h-48 w-full"> -->
 <!-- SVG Line Chart Mockup -->
-<svg class="w-full h-full stroke-primary fill-none" viewbox="0 0 1000 200">
+<!-- <svg class="w-full h-full stroke-primary fill-none" viewbox="0 0 1000 200">
 <path d="M0,180 L100,160 L200,170 L300,120 L400,140 L500,100 L600,110 L700,40 L800,60 L900,20 L1000,30" stroke-width="2" vector-effect="non-scaling-stroke"></path>
 <path class="fill-primary/5" d="M0,180 L100,160 L200,170 L300,120 L400,140 L500,100 L600,110 L700,40 L800,60 L900,20 L1000,30 V200 H0 Z" stroke="none"></path>
 </svg>
@@ -446,6 +446,21 @@ Row 3 -->
 <span>1980</span><span>1990</span><span>2000</span><span>2010</span><span>2020</span><span>2024</span>
 </div>
 </div>
+</div> -->
+<!-- Movies by Release Year (Full Width) -->
+<div class="glass-panel p-6 rounded-xl lg:col-span-2">
+  <div class="flex items-center gap-2 mb-6">
+    <div class="w-4 h-[1px] bg-primary"></div>
+    <h3 class="font-label-caps text-label-caps text-primary uppercase">Movies by Release Year</h3>
+  </div>
+  <div class="relative h-48 w-full">
+    <!-- <svg class="w-full h-full stroke-primary fill-none" viewBox="0 0 1000 200" id="releaseYearChart"> -->
+    <svg class="w-full h-full stroke-primary fill-none" viewBox="0 0 1000 200" preserveAspectRatio="none" id="releaseYearChart">   
+      <path id="releaseYearLine" stroke-width="2" vector-effect="non-scaling-stroke"></path>
+      <path id="releaseYearFill" class="fill-primary/5" stroke="none"></path>
+    </svg>
+    <div class="flex justify-between mt-4 text-[10px] text-on-surface-variant font-label-caps" id="releaseYearLabels"></div>
+  </div>
 </div>
 </section>
 <!-- Tables Section -->
@@ -854,6 +869,40 @@ Row 3 -->
             }
         }
 
+        async function loadReleaseYearChart() {
+            const response = await fetch('http://localhost:3000/api/dashboard/releaseyear');
+            const data = await response.json(); // [{ decade: 1920, movie_count: 3 }, ...]
+
+            if (!data.length) return;
+
+            const counts = data.map(d => d.movie_count);
+            const maxCount = Math.max(...counts);
+            const minCount = Math.min(...counts);
+
+            const width = 1000;
+            const height = 200;
+            const padding = 10; // keep line off the very top/bottom edge
+
+            // x: evenly spaced across width based on index
+            // y: scaled so maxCount is near top (padding), minCount near bottom (height - padding)
+            const points = data.map((d, i) => {
+                const x = (i / (data.length - 1)) * width;
+                const range = maxCount - minCount || 1; // avoid divide by zero
+                const y = height - padding - ((d.movie_count - minCount) / range) * (height - padding * 2);
+                return { x, y };
+            });
+
+            const linePath = points.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+            const fillPath = `${linePath} V${height} H0 Z`;
+
+            document.getElementById('releaseYearLine').setAttribute('d', linePath);
+            document.getElementById('releaseYearFill').setAttribute('d', fillPath);
+
+            // Labels: show decade as "1920s", "1930s", etc.
+            const labelsContainer = document.getElementById('releaseYearLabels');
+            labelsContainer.innerHTML = data.map(d => `<span>${d.decade}s</span>`).join('');
+        }
+
         window.addEventListener("load", async () => {
             await loadNavbar();
             sementicSearchAnalytics();
@@ -864,6 +913,7 @@ Row 3 -->
             ratingDistribution();
             mostFavorited();
             avgRatingPerGenre();
+            loadReleaseYearChart();
         });
         
 
