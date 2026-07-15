@@ -1,0 +1,38 @@
+services:
+
+  plotpoint-frontend:
+     container_name: frontend-cont-plotpoint
+     build: .
+     ports:
+      - 80:80
+
+  plotpoint-backend:
+     build: ./Backend/.
+     container_name: backend-cont-plotpoint
+     ports:
+      - 5000:3000
+     depends_on:
+      - postgres-cont
+     env_file:
+      - ./Backend/.env
+
+  postgres-cont:
+    image: pgvector/pgvector:pg17
+    container_name: database-cont-plotpoint
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      # 1. This keeps your data persistent on your host machine permanently
+     - pg_vector_data:/var/lib/postgresql/data
+
+      # 2. This maps your backup file into the magic initialization folder
+     - ./Backup-plot-point/clean_backup.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  pg_vector_data:
+

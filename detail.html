@@ -418,6 +418,7 @@
 </div>
 </footer> -->
 <div id="footer"></div>
+<script src="config.js"></script>
 <script src="components/navbar.js"></script>
 <script src="components/footer.js"></script>
 <script>
@@ -464,7 +465,7 @@
 
         
         async function loadMovies(){
-            const fetchmovies = await fetch(`http://localhost:3000/api/movies/${movies_id}`);
+            const fetchmovies = await fetch(`http://168.144.84.3:5000/api/movies/${movies_id}`);
             const data  = await fetchmovies.json();
             console.log(data);
             console.log(data.movie.movie_id);
@@ -602,12 +603,12 @@
                 const savedId = localStorage.getItem('user_id');
                 console.log(textarea);
 
-                const result = await fetch(`http://localhost:3000/api/reviews/${movies_id}`);
+                const result = await fetch(`http://168.144.84.3:5000/api/reviews/${movies_id}`);
                 const reviews = await result.json();
                 const myReviews = reviews.find(r => r.user_id == savedId);
 
                 if(myReviews){
-                    const put = await fetch(`http://localhost:3000/api/reviews/${myReviews.review_id}` , {
+                    const put = await fetch(`http://168.144.84.3:5000/api/reviews/${myReviews.review_id}` , {
                         method: "PUT",
                         headers: {
                             "Content-Type": "application/json"
@@ -618,7 +619,7 @@
                     });
                 }
                 else{
-                    const res = await fetch("http://localhost:3000/api/reviews", {
+                    const res = await fetch(API_BASE_URL + "/api/reviews", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -641,7 +642,7 @@
         async function getReviews() {
             try{
                 const savedId = localStorage.getItem('user_id');
-                const Reviews = await fetch(`http://localhost:3000/api/reviews/${movies_id}`);
+                const Reviews = await fetch(`http://168.144.84.3:5000/api/reviews/${movies_id}`);
                 const results = await Reviews.json();
                 console.log("Check reviews");
                 console.log("RESULTS:", results); // ✅ add this
@@ -665,7 +666,7 @@
                     deleteBtn.innerHTML = '✕';
                     deleteBtn.className = "absolute top-4 right-4 text-on-surface-variant/40 hover:text-red-400 transition-colors text-sm w-6 h-6 flex items-center justify-center rounded-full hover:bg-white/5";
                     deleteBtn.addEventListener('click', async () => {
-                        await fetch(`http://localhost:3000/api/reviews/${element.review_id}`, {
+                        await fetch(`http://168.144.84.3:5000/api/reviews/${element.review_id}`, {
                             method: "DELETE"
                         });
                         getReviews(); // refresh list
@@ -742,7 +743,7 @@
                 alert("Please select a rating first!");
                 return;
             }
-            const postRating = await fetch(`http://localhost:3000/api/ratings` , {
+            const postRating = await fetch(`http://168.144.84.3:5000/api/ratings` , {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -761,7 +762,7 @@
 
         async function getRatings() {
             try{
-            const Ratings = await fetch(`http://localhost:3000/api/ratings/${movies_id}`);
+            const Ratings = await fetch(`http://168.144.84.3:5000/api/ratings/${movies_id}`);
             const response = await Ratings.json();
             console.log("Rating Info");
             console.log(response.average_rating);
@@ -781,7 +782,7 @@
         //adding to favourites 
         document.querySelector(".favourite-btn").addEventListener("click" , async()=>{
             const savedId = localStorage.getItem('user_id');
-            const postFavourite = await fetch("http://localhost:3000/api/favorites/toggle" , {
+            const postFavourite = await fetch(API_BASE_URL + "/api/favorites/toggle" , {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json" 
@@ -804,7 +805,7 @@
         document.querySelector(".watchlist-btn").addEventListener("click" , async()=>{
             try{
                 const savedId = localStorage.getItem('user_id');
-                const postWatlist = await fetch("http://localhost:3000/api/watchlist" , {
+                const postWatlist = await fetch(API_BASE_URL + "/api/watchlist" , {
                     
                     method: "POST",
                     headers: {
@@ -822,7 +823,7 @@
             }
         })
         async function loadRatingComparison() {
-            const res = await fetch(`http://localhost:3000/api/ratings/${movies_id}`);
+            const res = await fetch(`http://168.144.84.3:5000/api/ratings/${movies_id}`);
             const ratings = await res.json();
 
             const platformVal = parseFloat(ratings.average_rating) || 0;

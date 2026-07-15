@@ -11,7 +11,7 @@ async function loadNavbar() {
 }
 
 async function loadUsers() {
-    const response = await fetch('http://localhost:3000/api/users');
+    const response = await fetch('http://168.144.84.3:5000/api/users');
     const users = await response.json();
     const select = document.getElementById('userSelect');
     select.innerHTML = '<option value="">Sign In</option>';

@@ -368,7 +368,7 @@
 
   // ── USERS DROPDOWN ──────────────────────────────
   async function loadUsers() {
-    const response = await fetch('http://localhost:3000/api/users');
+    const response = await fetch('http://168.144.84.3:5000/api/users');
     const users = await response.json();
     const select = document.getElementById('userSelect');
     select.innerHTML = '<option value="">Sign In</option>';
@@ -478,7 +478,7 @@
   async function addToFavorites(movieId) {
     const userId = localStorage.getItem('user_id');
     if (!userId) { alert('Please sign in first'); return; }
-    const res = await fetch('http://localhost:3000/api/favorites/toggle', {
+    const res = await fetch('http://168.144.84.3:5000/api/favorites/toggle', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ user_id: userId, movie_id: movieId })
@@ -490,7 +490,7 @@
   async function addToWatchlist(movieId) {
     const userId = localStorage.getItem('user_id');
     if (!userId) { alert('Please sign in first'); return; }
-    await fetch('http://localhost:3000/api/watchlist', {
+    await fetch('http://168.144.84.3:5000/api/watchlist', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ user_id: userId, movie_id: movieId })
@@ -518,7 +518,7 @@
   //   document.getElementById('navSearch').value = query;
   //   document.querySelector('.query-phrase').textContent = `"${query}"`;
 
-  //   const res = await fetch(`http://localhost:3000/api/search?prompt=${encodeURIComponent(query)}`);
+  //   const res = await fetch(`http://168.144.84.3:5000/api/search?prompt=${encodeURIComponent(query)}`);
   //   const data = await res.json();
 
   //   // update result count
@@ -538,7 +538,7 @@
     document.querySelector('.query-phrase').textContent = `"${query}"`;
 
     // Step 1 — fetch search results first (fast)
-    const res = await fetch(`http://localhost:3000/api/search?prompt=${encodeURIComponent(query)}`);
+    const res = await fetch(`http://168.144.84.3:5000/api/search?prompt=${encodeURIComponent(query)}`);
     const data = await res.json();
 
     // Step 2 — render everything immediately
@@ -565,7 +565,7 @@
 
     // log search
     const userId = localStorage.getItem('user_id');
-    fetch('http://localhost:3000/api/search-log', {
+    fetch('http://168.144.84.3:5000/api/search-log', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -578,7 +578,7 @@
 
     // log search
     const userId = localStorage.getItem('user_id');
-    fetch('http://localhost:3000/api/search-log', {
+    fetch('http://168.144.84.3:5000/api/search-log', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -616,6 +616,7 @@
   });
 </script> -->
 
+<script src="config.js"></script>
 <script src="components/footer.js"></script>
 <script>
   const params = new URLSearchParams(window.location.search);
@@ -623,7 +624,7 @@
 
   // ── USERS DROPDOWN ──────────────────────────────
   async function loadUsers() {
-    const response = await fetch('http://localhost:3000/api/users');
+    const response = await fetch('http://168.144.84.3:5000/api/users');
     const users = await response.json();
     const select = document.getElementById('userSelect');
     select.innerHTML = '<option value="">Sign In</option>';
@@ -729,7 +730,7 @@
   async function addToFavorites(movieId) {
     const userId = localStorage.getItem('user_id');
     if (!userId) { alert('Please sign in first'); return; }
-    const res = await fetch('http://localhost:3000/api/favorites/toggle', {
+    const res = await fetch('http://168.144.84.3:5000/api/favorites/toggle', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ user_id: userId, movie_id: movieId })
@@ -741,7 +742,7 @@
   async function addToWatchlist(movieId) {
     const userId = localStorage.getItem('user_id');
     if (!userId) { alert('Please sign in first'); return; }
-    await fetch('http://localhost:3000/api/watchlist', {
+    await fetch('http://168.144.84.3:5000/api/watchlist', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ user_id: userId, movie_id: movieId })
@@ -842,7 +843,7 @@ function matchesRating(movie) {
     document.getElementById('navSearch').value = query;
     document.querySelector('.query-phrase').textContent = `"${query}"`;
 
-    const res = await fetch(`http://localhost:3000/api/search?prompt=${encodeURIComponent(query)}`);
+    const res = await fetch(`http://168.144.84.3:5000/api/search?prompt=${encodeURIComponent(query)}`);
     const data = await res.json();
 
     // populate genres from actual search results
@@ -906,7 +907,7 @@ document.querySelectorAll('.genre-item input').forEach(function(cb) {
 
     // log search
     const userId = localStorage.getItem('user_id');
-    fetch('http://localhost:3000/api/search-log', {
+    fetch('http://168.144.84.3:5000/api/search-log', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

@@ -153,6 +153,7 @@
 </footer> -->
 <div id="footer"></div>
 
+<script src="config.js"></script>
 <script src="components/navbar.js"></script>
 <script src="components/footer.js"></script>
 
@@ -220,7 +221,7 @@
     async function removeFavorite(userId, movieId) {
         // Reuses your existing toggle endpoint — since it's already favorited,
         // calling toggle again flips it off.
-        await fetch('http://localhost:3000/api/favorites/toggle', {
+        await fetch('http://168.144.84.3:5000/api/favorites/toggle', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ user_id: userId, movie_id: movieId })
@@ -228,7 +229,7 @@
     }
 
     async function removeFromWatchlist(userId, movieId) {
-        await fetch(`http://localhost:3000/api/watchlist/${userId}/${movieId}`, {
+        await fetch(`http://168.144.84.3:5000/api/watchlist/${userId}/${movieId}`, {
             method: 'DELETE'
         });
     }
@@ -248,7 +249,7 @@
         listContent.classList.remove('hidden');
 
         try {
-            const favRes = await fetch(`http://localhost:3000/api/favorites/${userId}`);
+            const favRes = await fetch(`http://168.144.84.3:5000/api/favorites/${userId}`);
             const favorites = await favRes.json();
             renderList(favorites, 'favoritesGrid', 'favoritesEmpty', (movieId) => removeFavorite(userId, movieId));
         } catch (err) {
@@ -256,7 +257,7 @@
         }
 
         try {
-            const watchRes = await fetch(`http://localhost:3000/api/watchlist/${userId}`);
+            const watchRes = await fetch(`http://168.144.84.3:5000/api/watchlist/${userId}`);
             const watchlist = await watchRes.json();
             renderList(watchlist, 'watchlistGrid', 'watchlistEmpty', (movieId) => removeFromWatchlist(userId, movieId));
         } catch (err) {
