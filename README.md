@@ -184,18 +184,6 @@ curl http://localhost:5000/api/movies
 # Check database connection
 docker exec -it database-cont-plotpoint psql -U postgres -d postgres
 ```
-## Key Technical Decisions
-
-**Why pgvector inside PostgreSQL instead of a standalone vector database?**
-Enables combining cosine similarity search with SQL JOINs in a single query — soft AI ranking + hard relational filters together. Same pattern used by enterprise search systems.
-
-**Why content-based filtering instead of collaborative?**
-Collaborative filtering requires thousands of users to produce meaningful recommendations. Content-based works from the first liked movie — no cold start problem, no other users needed.
-
-**Why ON DELETE SET NULL on search_logs?**
-Search logs have analytical value even after a user is deleted. Genre trends, popular queries, search patterns — this data is valuable regardless of who searched. Other user data (favorites, watchlist) cascades because it has no meaning without the user.
-
----
 
 ## What I Learned
 
@@ -207,6 +195,7 @@ Without knowing it, I independently derived and implemented:
 - **Cross-lingual Semantic Embeddings**
 - **Vector Indexing** (ivfflat approximate nearest neighbor)
 - **Data Pipeline Engineering**
+- **Containerizing app end-to-end**
 
 ---
 
