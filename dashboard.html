@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
 <html class="dark" lang="en"><head>
+<script src="config.js"></script>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>PlotPoint Analytics | Cinematic Intelligence</title>
@@ -630,7 +631,7 @@ Row 3 -->
         //Semantic Search Insights
         async function sementicSearchAnalytics(params) {
             try{
-                const getData = await fetch(API_BASE_URL + "/api/dashboard/sementic-insights");
+                const getData = await fetch('http://168.144.84.3:5000/api/dashboard/sementic-insights');
                 const data = await getData.json();
                 console.log(data);
                 data.forEach(element => {
@@ -660,7 +661,7 @@ Row 3 -->
         //Header Info
         async function HeaderInfo() {
             try{
-                const data = await fetch(API_BASE_URL + "/api/dashboard/header");
+                const data = await fetch('http://168.144.84.3:5000/api/dashboard/header');
                 const resultsData = await data.json();
                 console.log(resultsData[0].totalmovies);
                 console.log(resultsData[0].totalcast);
@@ -683,7 +684,7 @@ Row 3 -->
 
         async function topMovies() {
             try{
-                const getTopMovies = await fetch(API_BASE_URL + "/api/dashboard/topmovies");
+                const getTopMovies = await fetch('http://168.144.84.3:5000/api/dashboard/topmovies');
                 const getResults = await getTopMovies.json();
                 getResults.forEach(element => {
                     console.log(element);
@@ -725,7 +726,7 @@ Row 3 -->
         //active users
         async function activeUsers() {
             try{
-                const getUsers = await fetch(API_BASE_URL + "/api/dashboard/activeusers");
+                const getUsers = await fetch('http://168.144.84.3:5000/api/dashboard/activeusers');
                 const getData = await getUsers.json();
                 for (let index = 0; index < getData.length; index++) {
                     const container1 = document.querySelector(".container-2");
@@ -749,7 +750,7 @@ Row 3 -->
 
         async function moviesPerGenre() {
             try {
-                const res = await fetch(API_BASE_URL + "/api/dashboard/moviesPerGenre");
+                const res = await fetch('http://168.144.84.3:5000/api/dashboard/moviesPerGenre');
                 const data = await res.json();
 
                 const maxCount = Math.max(...data.map(g => Number(g.count)));
@@ -777,7 +778,7 @@ Row 3 -->
 
         async function ratingDistribution() {
             try {
-                const res = await fetch(API_BASE_URL + "/api/dashboard/ratingdist");
+                const res = await fetch('http://168.144.84.3:5000/api/dashboard/ratingdist');
                 const data = await res.json();
 
                 const total = data.reduce((sum, r) => sum + Number(r.count), 0);
@@ -802,7 +803,7 @@ Row 3 -->
 
         async function mostFavorited() {
             try {
-                const res = await fetch(API_BASE_URL + "/api/dashboard/mostfavorited");
+                const res = await fetch('http://168.144.84.3:5000/api/dashboard/mostfavorited');
                 const data = await res.json();
 
                 const maxCount = Math.max(...data.map(m => Number(m.count)));
@@ -827,7 +828,7 @@ Row 3 -->
 
         // async function avgRatingPerGenre() {
         //     try {
-        //         const res = await fetch(API_BASE_URL + "/api/dashboard/avgrating");
+        //         const res = await fetch('http://168.144.84.3:5000/api/dashboard/avgrating');
         //         const data = await res.json();
         //         console.log(data[0]);
 
@@ -850,7 +851,7 @@ Row 3 -->
 
         async function avgRatingPerGenre() {
             try {
-                const res = await fetch(API_BASE_URL + "/api/dashboard/avgrating");
+                const res = await fetch('http://168.144.84.3:5000/api/dashboard/avgrating');
                 const data = await res.json();
 
                 const container = document.querySelector(".avgrating-box");
