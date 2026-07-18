@@ -4,6 +4,8 @@ A RAG-based semantic movie discovery engine that transforms natural language que
 
 ---
 
+https://github.com/user-attachments/assets/ad3f8e4e-2448-439e-973d-21377fc860f6
+
 ## What Makes It Different
 
 Most movie apps search by title or genre. PlotPoint searches by **feeling**.
